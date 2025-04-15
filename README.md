@@ -1,2 +1,2 @@
 # Coding-island
-A repo i created to work on various projects
+A repository i made in order to work on my technical skills.
