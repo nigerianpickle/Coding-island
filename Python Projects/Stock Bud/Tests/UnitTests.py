@@ -1,9 +1,14 @@
 #Unit test for news.py
+import os
 import unittest
 import sys
-# caution: path[0] is reserved for script path (or '' in REPL)
-sys.path.insert(1, 'Python Projects\Stock Bud\Objects\News.py')
 
+# 1) Add the **folder** containing News.py, not the file itself.
+repo_root = os.path.abspath(r'Python Projects\Stock Bud\Objects')
+sys.path.insert(1, repo_root)           # now Python will look here second
+
+# 2) Only now import your module
+from News import News
 
 
 news={"Title": "Test Title",
@@ -16,16 +21,32 @@ news={"Title": "Test Title",
 
 test_news = News(news['Title'], news['Description'], news['Date'], news['Source'])
 
-
-
-
-
-
 #TESTING NEWS CLASS
-unittest.Testcase.assertEqual(test_news.title, news['Title'])
-unittest.Testcase.assertEqual(test_news.description, news['Description'])
-unittest.Testcase.assertEqual(test_news.date,news['Date'])
-unittest.Testcase.assertEqual(test_news.source,news['Source'])
+class TestNews(unittest.TestCase):
+    def test_news(self):
+        self.assertEqual(test_news.title, news['Title'], msg="Test passed")
+        self.assertEqual(test_news.description, news['Description'], msg="Test passed")
+        self.assertEqual(test_news.date, news['Date'], msg="Test passed")
+        self.assertEqual(test_news.source, news['Source'], msg="Test passed")
+        
+
+
+
+def main():
+    print("Title:", test_news.title)
+    print("Description:", test_news.description)
+    print("Date:", test_news.date)
+    print("Source:", test_news.source)
+    unittest.main()
+    
+
+
+
+if __name__ == "__main__":
+    main()
+
+
+
 
 
 
