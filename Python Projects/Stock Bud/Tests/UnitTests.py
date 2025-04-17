@@ -5,9 +5,9 @@ import sys
 
 # 1) Add the **folder** containing News.py, not the file itself.
 repo_root = os.path.abspath(r'Python Projects\Stock Bud\Objects')
-sys.path.insert(1, repo_root)           # now Python will look here second
+sys.path.insert(1, repo_root)           
 
-# 2) Only now import your module
+# 2) Only now import our module
 from News import News
 
 
