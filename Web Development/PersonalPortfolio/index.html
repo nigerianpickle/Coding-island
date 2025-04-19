@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Daniel Nwogo – Portfolio</title>
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- GSAP & ScrollTrigger -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.7/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.7/ScrollTrigger.min.js"></script>
+  <!-- Lottie Player -->
+  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+  <style>
+    /* CSS Variables for color palettes */
+    :root {
+      --color-primary: #3b82f6;   /* blue */
+      --bg-light: #ffffff;
+      --bg-dark:  #1f2937;
+      --text-light: #111827;
+      --text-dark:  #f3f4f6;
+    }
+    [data-theme="dark"] {
+      --bg-light: var(--bg-dark);
+      --text-light: var(--text-dark);
+    }
+    body {
+      background: var(--bg-light);
+      color: var(--text-light);
+      transition: background 0.3s, color 0.3s;
+    }
+    /* simple button style */
+    .btn {
+      background: var(--color-primary);
+      color: white;
+      padding: .5rem 1rem;
+      border-radius: .375rem;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body class="antialiased">
+
+  <!-- NAVBAR -->
+  <header class="fixed top-0 w-full bg-opacity-50 backdrop-blur z-50">
+    <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+      <h1 class="text-xl font-bold" style="color: var(--color-primary)">Daniel Nwogo</h1>
+      <div class="space-x-4">
+        <a href="#resume" class="hover:underline">Resume</a>
+        <a href="#projects" class="hover:underline">Projects</a>
+        <a href="#experience" class="hover:underline">Experience</a>
+        <a href="#education" class="hover:underline">Education</a>
+        <a href="#skills" class="hover:underline">Skills</a>
+        <a href="#activities" class="hover:underline">Activities</a>
+        <a href="#contact" class="hover:underline">Contact</a>
+        <button id="theme-toggle" class="ml-4 text-lg">🌙</button>
+      </div>
+    </nav>
+  </header>
+  <div class="pt-20"></div>
+
+  <!-- RESUME SECTION -->
+  <section id="resume" class="container mx-auto px-6 py-16">
+    <h2 class="text-3xl font-bold mb-6">Resume</h2>
+    <div class="flex flex-col md:flex-row gap-6">
+      <iframe
+        src="resume.pdf"
+        class="flex-1 border rounded-lg shadow-lg"
+        style="height:500px;"
+      ></iframe>
+      <div class="flex items-center justify-center">
+        <a href="resume.pdf" download class="btn">Download PDF</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS SECTION -->
+  <section id="projects" class="bg-gray-50 py-16">
+    <div class="container mx-auto px-6">
+      <h2 class="text-3xl font-bold mb-10 text-center" style="color: var(--color-primary)">Projects</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+        <!-- Football Simulator Project -->
+        <div class="bg-white rounded-xl shadow-lg p-8 relative overflow-hidden">
+          <!-- Lottie football animation in corner -->
+          <lottie-player
+            src="https://assets9.lottiefiles.com/packages/lf20_tutvdkg0.json"
+            background="transparent" speed="1" loop autoplay
+            style="width: 120px; height: 120px; position: absolute; top: -20px; right: -20px;"
+          ></lottie-player>
+
+          <h3 class="text-2xl font-semibold mb-4">Football Simulator</h3>
+          <p class="text-gray-700 mb-4">
+            A custom physics‑driven football simulation engine built in C++ and exposed to the web via WebAssembly. Rendered players and ball trajectories using an HTML5 canvas.
+          </p>
+          <ul class="list-disc pl-5 text-gray-600 mb-4">
+            <li>C++ physics core & WASM integration</li>
+            <li>Canvas-based rendering & controls</li>
+            <li>AI-driven passing logic</li>
+          </ul>
+          <a href="#contact" class="btn">See Demo</a>
+        </div>
+
+        <!-- EasyQuizzy Project -->
+        <div class="bg-white rounded-xl shadow-lg p-8 relative overflow-hidden">
+          <!-- Quick quiz icon animation -->
+          <lottie-player
+            src="https://assets2.lottiefiles.com/packages/lf20_s2l1ff.json"
+            background="transparent" speed="1" loop autoplay
+            style="width: 100px; height: 100px; position: absolute; top: -10px; left: -10px;"
+          ></lottie-player>
+
+          <h3 class="text-2xl font-semibold mb-4">EasyQuizzy</h3>
+          <p class="text-gray-700 mb-4">
+            A React & Node.js study platform with custom quiz creation, note‑taking, and timed study sessions. Integrated with MongoDB for user data and Firebase for auth.
+          </p>
+          <ul class="list-disc pl-5 text-gray-600 mb-4">
+            <li>React, Tailwind CSS, Node.js</li>
+            <li>Quiz builder & activity logging</li>
+            <li>Responsive & PWA‑ready</li>
+          </ul>
+          <a href="https://code.cs.umanitoba.ca/comp3350-winter2025/A02-G13-EasyQuizzy" target="_blank" class="btn">View Code</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE SECTION -->
+  <section id="experience" class="container mx-auto px-6 py-16">
+    <h2 class="text-3xl font-bold mb-6">Experience</h2>
+    <div class="space-y-10">
+      <!-- Zumiez entry -->
+      <div class="relative p-6 border-l-4 border-blue-500">
+        <h3 class="text-xl font-semibold">2nd Assistant Manager – Zumiez</h3>
+        <span class="text-gray-500 text-sm">May 2024 – Present</span>
+        <ul class="list-disc pl-5 mt-3 text-gray-700">
+          <li>In‑store revenue ↑32% via product placement & upselling.</li>
+          <li>Managed opening/closing procedures & led team in absence of seniors.</li>
+        </ul>
+        <!-- clothes hanger animation -->
+        <lottie-player
+          src="https://assets2.lottiefiles.com/packages/lf20_gjrtrabg.json"
+          background="transparent" speed="1" loop autoplay
+          style="width: 80px; height: 80px; position: absolute; top: 0; right: -30px;"
+        ></lottie-player>
+      </div>
+      <!-- Sunnet Systems entry -->
+      <div class="relative p-6 border-l-4 border-green-500">
+        <h3 class="text-xl font-semibold">Project Intern – Sunnet Systems</h3>
+        <span class="text-gray-500 text-sm">Apr 2023 – Sep 2023</span>
+        <ul class="list-disc pl-5 mt-3 text-gray-700">
+          <li>Automated web‑scraping with Python & Beautiful Soup.</li>
+          <li>Designed Power BI dashboards for senior management insights.</li>
+        </ul>
+        <!-- data chart animation -->
+        <lottie-player
+          src="https://assets8.lottiefiles.com/packages/lf20_ux1srwpz.json"
+          background="transparent" speed="1" loop autoplay
+          style="width: 70px; height: 70px; position: absolute; top: -10px; left: -30px;"
+        ></lottie-player>
+      </div>
+      <!-- Space Apps entry -->
+      <div class="relative p-6 border-l-4 border-purple-500">
+        <h3 class="text-xl font-semibold">Software Team – Space Apps (UM Space)</h3>
+        <span class="text-gray-500 text-sm">Oct 2024 – Present</span>
+        <ul class="list-disc pl-5 mt-3 text-gray-700">
+          <li>Refactored and debugged satellite communications code.</li>
+          <li>Performed GitHub code reviews & refined testing protocols.</li>
+        </ul>
+        <!-- satellite animation -->
+        <lottie-player
+          src="https://assets3.lottiefiles.com/packages/lf20_rJb5pT.json"
+          background="transparent" speed="1" loop autoplay
+          style="width: 80px; height: 80px; position: absolute; bottom: -20px; right: -20px;"
+        ></lottie-player>
+      </div>
+    </div>
+  </section>
+
+  <!-- EDUCATION SECTION -->
+  <section id="education" class="bg-gray-50 py-16">
+    <div class="container mx-auto px-6 flex flex-col md:flex-row items-center gap-10">
+      <div class="flex-1">
+        <h2 class="text-3xl font-bold mb-4">Education</h2>
+        <h3 class="text-xl font-semibold">B.S. Computer Science</h3>
+        <span class="text-gray-500">University of Manitoba, Expected Fall 2026</span>
+        <p class="mt-4 text-gray-700">
+          <strong>Areas of interest:</strong> Data Analytics, Simulation & Modelling, Automation, Software Development.
+        </p>
+      </div>
+      <div class="flex-1">
+        <!-- graduation cap animation -->
+        <lottie-player
+          src="https://assets2.lottiefiles.com/packages/lf20_jgqn3jvm.json"
+          background="transparent" speed="1" loop autoplay
+          style="width: 200px; height: 200px;"
+        ></lottie-player>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS SECTION -->
+  <section id="skills" class="container mx-auto px-6 py-16">
+    <h2 class="text-3xl font-bold mb-6">Skills</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div>
+        <h4 class="font-semibold mb-3">Programming Languages</h4>
+        <div class="flex flex-wrap gap-4">
+          <span class="px-3 py-1 border rounded-full">Java</span>
+          <span class="px-3 py-1 border rounded-full">Python</span>
+          <span class="px-3 py-1 border rounded-full">JavaScript</span>
+          <span class="px-3 py-1 border rounded-full">C</span>
+          <span class="px-3 py-1 border rounded-full">SQL</span>
+        </div>
+      </div>
+      <div>
+        <h4 class="font-semibold mb-3">Tools & Frameworks</h4>
+        <div class="flex flex-wrap gap-4">
+          <span class="px-3 py-1 border rounded-full">Linux</span>
+          <span class="px-3 py-1 border rounded-full">Pandas</span>
+          <span class="px-3 py-1 border rounded-full">Godot</span>
+          <span class="px-3 py-1 border rounded-full">Excel</span>
+          <span class="px-3 py-1 border rounded-full">Git</span>
+          <span class="px-3 py-1 border rounded-full">Bootstrap</span>
+          <span class="px-3 py-1 border rounded-full">Neo4j</span>
+          <span class="px-3 py-1 border rounded-full">MongoDB</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ACTIVITIES SECTION -->
+  <section id="activities" class="bg-gray-50 py-16">
+    <div class="container mx-auto px-6 flex flex-col md:flex-row items-center gap-10">
+      <div class="flex-1">
+        <h2 class="text-3xl font-bold mb-4">Activities & Leadership</h2>
+        <h3 class="text-xl font-semibold">Athlete – U of M Track & Field</h3>
+        <span class="text-gray-500">Sept 2022 – June 2024</span>
+        <ul class="list-disc pl-5 mt-3 text-gray-700">
+          <li>Competed as sprinter/jumper in intercollegiate events.</li>
+          <li>Maintained rigorous training alongside academics.</li>
+        </ul>
+      </div>
+      <div class="flex-1">
+        <!-- runner animation -->
+        <lottie-player
+          src="https://assets6.lottiefiles.com/packages/lf20_hqoa2gho.json"
+          background="transparent" speed="1" loop autoplay
+          style="width: 200px; height: 200px;"
+        ></lottie-player>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT SECTION -->
+  <section id="contact" class="container mx-auto px-6 py-16">
+    <h2 class="text-3xl font-bold mb-6">Contact</h2>
+    <p class="mb-6 text-gray-700">Feel free to reach out for collaborations or just a friendly hello 👋</p>
+    <form class="max-w-md space-y-4">
+      <input type="text" placeholder="Your Name" class="w-full border px-4 py-2 rounded-lg focus:outline-none focus:ring" />
+      <input type="email" placeholder="Your Email" class="w-full border px-4 py-2 rounded-lg focus:outline-none focus:ring" />
+      <textarea rows="4" placeholder="Message" class="w-full border px-4 py-2 rounded-lg focus:outline-none focus:ring"></textarea>
+      <button type="submit" class="btn">Send Message</button>
+    </form>
+    <div class="mt-8 flex space-x-6">
+      <a href="mailto:daniel@example.com" class="text-2xl hover:text-blue-600">✉️</a>
+      <a href="https://github.com/yourusername" target="_blank" class="text-2xl hover:text-blue-600">🐱</a>
+      <a href="https://linkedin.com/in/yourprofile" target="_blank" class="text-2xl hover:text-blue-600">💼</a>
+    </div>
+  </section>
+
+  <!-- THEME TOGGLE SCRIPT -->
+  <script>
+    const btn = document.getElementById('theme-toggle');
+    btn.addEventListener('click', () => {
+      const root = document.documentElement;
+      const current = root.getAttribute('data-theme');
+      const next = current === 'light' ? 'dark' : 'light';
+      root.setAttribute('data-theme', next);
+      btn.textContent = next === 'light' ? '🌙' : '☀️';
+      localStorage.setItem('theme', next);
+    });
+    // on load, restore
+    const saved = localStorage.getItem('theme');
+    if (saved) {
+      document.documentElement.setAttribute('data-theme', saved);
+      btn.textContent = saved === 'light' ? '🌙' : '☀️';
+    }
+  </script>
+
+  <!-- GSAP SCROLL ANIMATIONS -->
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+    gsap.utils.toArray('section').forEach(sec => {
+      gsap.from(sec.querySelectorAll('h2, h3, p, ul, form, iframe, lottie-player'), {
+        opacity: 0,
+        y: 40,
+        duration: 0.8,
+        ease: 'power2.out',
+        stagger: 0.15,
+        scrollTrigger: {
+          trigger: sec,
+          start: 'top 80%',
+          toggleActions: 'play none none none'
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
