@@ -44,7 +44,35 @@ class NewsExtractor:
         return news
 
     #
-   
+    #Used to extract multiple news articles from a list of urls
+    def extractMultipleNews(self, urls):
+        newsList = []
+        for url in urls:
+            news = self.extractNews(url)
+            newsList.append(news)
+        return newsList
+    
+    #Used to extract multiple urls from a News homepage
+    def extractMultipleUrls(self, url):
+        newsList = []
+        for url in urls:
+            article = Article(url)
+            article.download()
+            article.parse()
+            article.nlp()
+            
+            news = News(
+                title=article.title,
+                description=article.summary,
+                date=article.publish_date,
+                source=article.source_url,
+                data=article.text.strip()
+            )
+            
+            self.lastNews = news
+            self.prevNews[news.title] = news
+            newsList.append(news)
+        return newsList
         
         
         
