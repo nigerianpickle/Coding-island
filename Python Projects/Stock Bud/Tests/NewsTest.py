@@ -14,20 +14,26 @@ from News import News
 news={"Title": "Test Title",
             "Description": "Test Description",
             "Date": "2023-10-01",
-            "Source": "Test Source"}
+            "Source": "Test Source"
+            }
+
 
 
 
 
 test_news = News(news['Title'], news['Description'], news['Date'], news['Source'])
 
+
 #TESTING NEWS CLASS
 class TestNews(unittest.TestCase):
     def test_news(self):
-        self.assertEqual(test_news.title, news['Title'], msg="Test passed")
-        self.assertEqual(test_news.description, news['Description'], msg="Test passed")
-        self.assertEqual(test_news.date, news['Date'], msg="Test passed")
-        self.assertEqual(test_news.source, news['Source'], msg="Test passed")
+        self.assertEqual(test_news.title, news['Title'], msg="Should be equal")
+        self.assertEqual(test_news.description, news['Description'], msg="Should be equal")
+        self.assertEqual(test_news.date, news['Date'], msg="Should be equal")
+        self.assertEqual(test_news.source, news['Source'], msg="Should be equal")
+        self.assertIsNone(test_news.data, msg="Should be none")
+        test_news.set_data("Test Data")
+        self.assertEqual(test_news.data, "Test Data", msg="Should be equal")
         
 
 
