@@ -31,6 +31,9 @@ class News:
     def get_source(self):
         return self.source
     
+    def get_data(self):
+        return self.data
+    
     def set_data(self, data):
         self.data = data
         

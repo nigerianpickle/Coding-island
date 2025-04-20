@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Live Shark Tracker</title>
+  <style>
+    body { margin: 0; overflow: hidden; }
+    canvas { display: block; }
+  </style>
+</head>
+<body>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.5.0/p5.min.js"></script>
+  <script>
+    let bgColor;
+    let sharkPosArr = [];      // positions the shark will move through
+    let currIndex = 0;
+    let lerpAmt = 0;
+    let bgOffsetX = 0, bgOffsetY = 0;
+    let sharkName = '';
+
+    function setup() {
+      createCanvas(windowWidth, windowHeight);
+      bgColor = color(0, 119, 190); // nice ocean blue
+
+      // Fetch live shark data from OCEARCH
+      fetch('https://api.ocearch.org/animals/list')
+        .then(res => res.json())
+        .then(data => {
+          if (data.length > 0) {
+            // Pick a random shark
+            let shark = random(data);
+            sharkName = shark.name;
+
+            if (shark.lastPing && shark.lastPing.location) {
+              let lat = shark.lastPing.location.lat;
+              let lon = shark.lastPing.location.lng;
+
+              // Map lon/lat to canvas
+              let x = map(lon, -180, 180, 0, width);
+              let y = map(lat, 90, -90, 0, height);
+
+              // Add initial position
+              let startPos = createVector(x, y);
+              sharkPosArr.push(startPos);
+
+              // Generate fake "swimming" waypoints nearby
+              for (let i = 0; i < 20; i++) {
+                let offsetX = random(-100, 100);
+                let offsetY = random(-100, 100);
+                sharkPosArr.push(createVector(x + offsetX, y + offsetY));
+              }
+            }
+          }
+        });
+    }
+
+    function draw() {
+      background(bgColor);
+
+      // Draw ocean "waves" (just simple ellipses for now)
+      for (let i = 0; i < width; i += 100) {
+        for (let j = 0; j < height; j += 100) {
+          fill(0, 150, 200, 30);
+          ellipse(i + bgOffsetX % 100, j + bgOffsetY % 100, 80, 80);
+        }
+      }
+
+      if (sharkPosArr.length > 1) {
+        let nextIndex = (currIndex + 1) % sharkPosArr.length;
+        let currPos = p5.Vector.lerp(sharkPosArr[currIndex], sharkPosArr[nextIndex], lerpAmt);
+
+        // Draw shark
+        fill(255, 0, 0);
+        noStroke();
+        ellipse(currPos.x, currPos.y, 30, 30); // shark is a red circle for now
+
+        // Shark name
+        fill(255);
+        textSize(18);
+        textAlign(LEFT, TOP);
+        text("Tracking: " + sharkName, 10, 10);
+
+        lerpAmt += 0.01;
+        if (lerpAmt >= 1) {
+          lerpAmt = 0;
+          currIndex = nextIndex;
+        }
+      }
+    }
+
+    function mouseDragged() {
+      bgOffsetX += movedX * 0.5;
+      bgOffsetY += movedY * 0.5;
+    }
+
+    function windowResized() {
+      resizeCanvas(windowWidth, windowHeight);
+    }
+  </script>
+</body>
+</html>
