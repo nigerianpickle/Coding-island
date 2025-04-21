@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Daniel’s Pond</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <style>
+    html, body {
+      margin: 0; padding: 0;
+      overflow: hidden;
+      background: #000;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+
+    #refreshBtn {
+  position: absolute;
+  top: 10px;
+  left: 110px;
+  padding: 8px 12px;
+  background: #0af;
+  color: #000;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 100;
+  display: none;
+}
+    canvas { display: block; }
+  </style>
+</head>
+<body>
+  <!-- Audio elements -->
+  <audio id="splashAudio" src="water-splash.mp3"></audio>
+  <audio id="ambientAudio" src="water-ambient.mp3" loop></audio>
+  <button id="refreshBtn">⟳ Refresh</button>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.min.js"></script>
+  <script>
+    // ——— Audio setup ———
+    const splashAudio  = document.getElementById('splashAudio');
+    const ambientAudio = document.getElementById('ambientAudio');
+
+    // ——— State ———
+    let showSplash = true;
+
+    // Pond elements
+    let fishes = [], bubbles = [], ripples = [], particles = [];
+    const projects = [
+      { name: "Stock Bud",          url: "project-stockbud.html" },
+      { name: "Easy Quizzy",        url: "project-easyquizzy.html" },
+      { name: "Movie Database",     url: "project-moviedb.html" },
+      { name: "Path‑Finding Java!", url: "project-pathfind.html" },
+      { name: "Sale.IO",            url: "project-sale.html" },
+      { name: "Football Simulator", url: "project-football.html" },
+      { name: "NEVADA",             url: "project-nevada.html" },
+      { name: "Grade Helper",       url: "project-grade.html" },
+      { name: "Slime Jump",         url: "project-slime.html" }
+    ];
+    const fishColors = [
+      [255,128,50],[50,255,150],[80,150,255],
+      [230,80,230],[255,200,0],[200,50,200],
+      [100,255,100],[255,100,100],[180,180,50]
+    ];
+
+    function setup() {
+      createCanvas(windowWidth, windowHeight);
+
+      // Initialize fish
+      for (let i = 0; i < projects.length; i++) {
+        const p = projects[i];
+        fishes.push(new Fish(
+          p.name, p.url,
+          random(width), random(height),
+          random(140, 200),
+          color(...fishColors[i % fishColors.length]),
+          random(1, 2)
+        ));
+      }
+      // Bubbles
+      for (let i = 0; i < 30; i++) {
+        bubbles.push(new Bubble(
+          random(width),
+          random(height * 0.8, height),
+          random(5, 12)
+        ));
+      }
+      // Micro‑particles
+      for (let i = 0; i < 400; i++) {
+        particles.push(new Particle(
+          createVector(random(width), random(height)),
+          random(1, 4)
+        ));
+      }
+    }
+
+
+      const refreshBtn = document.getElementById('refreshBtn');
+      refreshBtn.addEventListener('click', () => location.reload());
+
+    function draw() {
+      // toggle the refresh button alongside backBtn
+      refreshBtn.style.display = showSplash ? 'none' : 'block';
+      if (showSplash) {
+        // Splash screen
+        background(10, 10, 30);
+        fill(255);
+        textAlign(CENTER, CENTER);
+
+        textSize(64);
+        text("Daniel’s Pond", width/2, height*0.2);
+
+        textSize(20);
+        textLeading(28);
+        text(
+          "About\n" +
+          "=========================================================================================\n" +
+          "Computer Science student at the University of Manitoba with hands-on experience in\n" +
+          "software development, data analytics, and full-stack development.\n" +
+          "Seeking opportunities to apply skills in a professional setting.",
+          width/2, height*0.40
+        );
+
+        textSize(20);
+        textLeading(28);
+        text(
+          "B.S. Computer Science, University of Manitoba\n" +
+          "Interests: Data Analytics, Simulation & Modelling, Automation, Software Development\n" +
+          "Coursework: OOP, OS, Algorithms, Databases, Software Engineering\n" +
+          "Hobbies: Programming (a lot), Jiu-Jitsu , Reading and Gaming.\n"+
+          "=========================================================================================\n" ,
+          width/2, height*0.60
+        );
+
+        textSize(24);
+        text("Welcome to the pond.\nPress SPACE or click to dive in", width/2, height*0.75);
+        return;
+      }
+
+      // Pond scene
+      drawOceanBackground();
+
+      // Particles
+      for (let p of particles) { p.update(); p.draw(); }
+
+      // Bubbles & ripples
+      updateBubbles();
+      updateRipples();
+
+      // Fish
+      let hovering = false;
+      textSize(14);
+      textAlign(CENTER, BOTTOM);
+      for (let f of fishes) {
+        f.update();
+        if (f.isMouseOver()) {
+          f.onHover();
+          hovering = true;
+        } else {
+          f.onHoverEnd();
+        }
+        f.draw();
+        fill(255);
+        noStroke();
+        text(f.name, f.pos.x, f.pos.y - f.size*0.6);
+      }
+      cursor(hovering ? 'pointer' : 'default');
+
+      // Foreground bubbles & ripples
+      for (let b of bubbles) b.draw();
+      for (let r of ripples) r.draw();
+    }
+
+    // Called when user dives in
+    function diveIn() {
+      splashAudio.currentTime = 0;
+      splashAudio.play();
+      ambientAudio.currentTime = 0;
+      ambientAudio.play();
+      showSplash = false;
+    }
+
+    function mousePressed() {
+      if (showSplash) {
+        diveIn();
+        return;
+      }
+      // ripple on click
+      ripples.push(new Ripple(mouseX, mouseY, false));
+
+      // **play splash on fish click**
+      for (let f of fishes) {
+        if (f.isMouseOver()) {
+          splashAudio.currentTime = 0;
+          splashAudio.play();
+          window.location.href = f.url;
+          return;
+        }
+      }
+    }
+
+    function keyPressed() {
+      if (showSplash && key === ' ') {
+        diveIn();
+      }
+    }
+
+    function windowResized() {
+      resizeCanvas(windowWidth, windowHeight);
+    }
+
+    // ——— Helper Classes ———
+
+    class Particle {
+      constructor(pos, sz) {
+        this.pos = pos.copy();
+        this.xoff = random(1000);
+        this.yoff = random(2000);
+        this.speed = random(0.5, 2.0);
+        this.size = sz;
+      }
+      update() {
+        const a = noise(this.xoff, this.yoff) * TWO_PI * 4;
+        const v = p5.Vector.fromAngle(a, this.speed);
+        this.pos.add(v);
+        this.xoff += 0.01; this.yoff += 0.01;
+        if (this.pos.x < 0) this.pos.x = width;
+        if (this.pos.x > width) this.pos.x = 0;
+        if (this.pos.y < 0) this.pos.y = height;
+        if (this.pos.y > height) this.pos.y = 0;
+      }
+      draw() {
+        noStroke();
+        fill(0, 50);
+        circle(this.pos.x, this.pos.y, this.size);
+      }
+    }
+
+    function drawOceanBackground() {
+      const top = color(50,150,200), bot = color(0,50,100);
+      const f = (sin(millis()*0.0003)+1)/2;
+      const c1 = lerpColor(color(0), top, f),
+            c2 = lerpColor(color(0), bot, f);
+      for (let y = 0; y < height; y++) {
+        stroke(lerpColor(c1, c2, y/height));
+        line(0, y, width, y);
+      }
+    }
+
+    class Fish {
+      constructor(name, url, x, y, s, c, sp) {
+        this.name = name; this.url = url;
+        this.pos = createVector(x, y);
+        this.vel = p5.Vector.fromAngle(random(TWO_PI), sp);
+        this.size = s; this.col = c;
+        this.phase = random(TWO_PI);
+        this.baseAmp = 0.1; this.wigAmp = 0.1;
+        this.interactR = s * 0.6; this.tick = 0;
+      }
+      update() {
+        this.vel.rotate(random(-0.03, 0.03));
+        this.pos.add(this.vel);
+        if (this.pos.x < -this.size) this.pos.x = width + this.size;
+        if (this.pos.x > width + this.size) this.pos.x = -this.size;
+        if (this.pos.y < -this.size) this.pos.y = height + this.size;
+        if (this.pos.y > height + this.size) this.pos.y = -this.size;
+        this.phase += 0.2;
+        if (++this.tick > 20) {
+          ripples.push(new Ripple(this.pos.x, this.pos.y, true));
+          this.tick = 0;
+        }
+      }
+      draw() {
+        push();
+        translate(this.pos.x, this.pos.y);
+        const wig = sin(this.phase) * this.wigAmp;
+        rotate(this.vel.heading() + wig);
+        noStroke(); fill(this.col);
+        ellipse(0, 0, this.size, this.size * 0.6);
+        fill(red(this.col)*0.8, green(this.col)*0.8, blue(this.col)*0.8);
+        triangle(
+          -this.size*0.5, 0,
+          -this.size*0.9, -this.size*0.2,
+          -this.size*0.9, this.size*0.2
+        );
+        if (dist(mouseX, mouseY, this.pos.x, this.pos.y) < this.interactR) {
+          stroke(255); strokeWeight(2); noFill();
+          ellipse(0, 0, this.size * 1.2, this.size * 0.8);
+        }
+        pop();
+      }
+      isMouseOver() {
+        return dist(mouseX, mouseY, this.pos.x, this.pos.y) < this.interactR;
+      }
+      onHover()   { this.wigAmp = this.baseAmp * 3; }
+      onHoverEnd(){ this.wigAmp = this.baseAmp; }
+    }
+
+    class Bubble {
+      constructor(x, y, r) {
+        this.pos = createVector(x, y);
+        this.r = r;
+        this.speed = random(0.5, 1.2);
+        this.drift = random(-0.3, 0.3);
+        this.alpha = random(150, 255);
+      }
+      update() {
+        this.pos.y -= this.speed;
+        this.pos.x += this.drift;
+        if (this.pos.y < height * 0.6) this.alpha--;
+        if (this.alpha < 0) this.alpha = 0;
+      }
+      draw() {
+        noStroke();
+        fill(255, this.alpha);
+        ellipse(this.pos.x, this.pos.y, this.r * 2);
+        if (this.pos.y < -this.r || this.alpha <= 0) {
+          this.pos.set(random(width), random(height * 0.8, height));
+          this.alpha = random(150, 255);
+        }
+      }
+    }
+
+    class Ripple {
+      constructor(x, y, small) {
+        this.x = x; this.y = y; this.r = 0; this.small = small;
+        if (small) { this.g = 0.8; this.a = 100; this.f = 1; }
+        else       { this.g = 2;   this.a = 200; this.f = 3; }
+      }
+      draw() {
+        this.r += this.g; this.a -= this.f;
+        if (this.a <= 0) return;
+        noFill(); stroke(255, this.a);
+        strokeWeight(this.small ? 1 : 2);
+        circle(this.x, this.y, this.r * 2);
+      }
+    }
+
+    function updateBubbles() { bubbles.forEach(b => b.update()); }
+    function updateRipples() { ripples = ripples.filter(r => r.a > 0); }
+  </script>
+</body>
+</html>

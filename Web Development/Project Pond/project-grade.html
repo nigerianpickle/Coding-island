@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Grade Helper</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <style>
+    html, body { margin:0; padding:0; overflow:hidden; background:#000; }
+    canvas { display:block; }
+    .panel {
+      position:absolute; top:25%; left:50%; transform:translateX(-50%);
+      background:rgba(0,0,0,0.6); color:#fff; padding:20px; border-radius:8px;
+      max-width:90%; font-family:sans-serif; animation:float 3s ease-in-out infinite;
+      text-align:center;
+    }
+    .panel h1 { margin:0 0 8px; }
+    .panel ul { list-style:none; padding:0; margin:8px 0; }
+    .panel li { margin:4px 0; }
+    @keyframes float {
+      0%,100% { transform:translate(-50%,0); }
+      50%     { transform:translate(-50%,-10px); }
+    }
+    .github { color:#0af; text-decoration:none; }
+    .return-btn {
+      display:inline-block; margin-top:12px; padding:8px 16px;
+      background:#0af; color:#000; text-decoration:none; border-radius:4px;
+      font-weight:bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="panel">
+    <h1>Grade Helper</h1>
+    <p>This is a little project i made to help me calculate my grades after a semester. I made it when i was 
+      trying to refresh my knowledge of Python. i 
+      plan on adding more features in the future. I also plan on making it a web app using Html and CSS.
+    </p>
+    <p>Technologies Used:</p>
+    <ul>
+      <li>Python:★★★★★</li>
+    </ul>
+    <p><a class="github" href="https://github.com/nigerianpickle/Coding-island/blob/main/Python%20Projects/Grade%20Helper/gradeHelper.py" target="_blank">View on GitHub →</a></p>
+    <p><a class="return-btn" onclick="history.back()">← Return to Pond</a></p>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.min.js"></script>
+  <script>
+    let x, y, dir = 1;
+    function setup(){
+      createCanvas(windowWidth, windowHeight);
+      x = width/2; y = height/2;
+    }
+    function draw(){
+      clear();
+      x += dir * 2;
+      if (x > width - 100 || x < 100) dir *= -1;
+      push();
+        translate(x, y); scale(dir,1);
+        noStroke(); fill(100,255,100);
+        ellipse(0,0,100,60);
+        fill(50,200,50);
+        triangle(-50,0, -90,-20, -90,20);
+      pop();
+    }
+    function windowResized(){ resizeCanvas(windowWidth, windowHeight); }
+  </script>
+</body>
+</html>

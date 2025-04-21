@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Path‑Finding Java!</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <style>
+    html, body { margin:0; padding:0; overflow:hidden; background:#000; }
+    canvas { display:block; }
+    .panel {
+      position:absolute; top:25%; left:50%; transform:translateX(-50%);
+      background:rgba(0,0,0,0.6); color:#fff; padding:20px; border-radius:8px;
+      max-width:90%; font-family:sans-serif; animation:float 3s ease-in-out infinite;
+      text-align:center;
+    }
+    .panel h1 { margin:0 0 8px; }
+    .panel ul { list-style:none; padding:0; margin:8px 0; }
+    .panel li { margin:4px 0; }
+    @keyframes float {
+      0%,100% { transform:translate(-50%,0); }
+      50%     { transform:translate(-50%,-10px); }
+    }
+    .github { color:#0af; text-decoration:none; }
+    .return-btn {
+      display:inline-block; margin-top:12px; padding:8px 16px;
+      background:#0af; color:#000; text-decoration:none; border-radius:4px;
+      font-weight:bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="panel">
+    <h1>Path‑Finding Java!</h1>
+    <p>
+      Path‑Finding Java! is a desktop application that brings the power of graph search algorithms
+      to life.  Users can draw walls and weighted terrain on a grid, then watch as A* and
+      Dijkstra’s algorithms explore in real time—complete with node coloring, open/closed lists,
+      and step‑by‑step controls.
+    </p>
+
+    <ul>
+      <li><strong>Interactive Grid:</strong> Click or drag to place barriers, weighted cells, start/end points.</li>
+      <li><strong>Real‑Time Visualization:</strong> Watch nodes light up as the frontier expands; adjust speed on the fly.</li>
+    </ul>
+
+    <p><strong>Technologies & Tools:</strong></p>
+    <ul>
+      <li>Java SE (core logic): ★★★★☆</li>
+      <li>Swing (custom Canvas & controls): ★★★★☆</li>
+    </ul>
+    <p><a class="github" href="https://github.com/nigerianpickle/PathFinding-Java" target="_blank">View on GitHub →</a></p>
+    <p><a class="return-btn" onclick="history.back()">← Return to Pond</a></p>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.min.js"></script>
+  <script>
+    let x, y, dir = 1;
+    function setup(){
+      createCanvas(windowWidth, windowHeight);
+      x = width/2; y = height/2;
+    }
+    function draw(){
+      clear();
+      x += dir * 2.2;
+      if (x > width - 110 || x < 110) dir *= -1;
+      push();
+        translate(x, y);
+        scale(dir,1);
+        noStroke(); fill(230,80,230);
+        ellipse(0,0,110,65);
+        fill(150,30,150);
+        triangle(-55,0, -95,-22, -95,22);
+      pop();
+    }
+    function windowResized(){ resizeCanvas(windowWidth, windowHeight); }
+  </script>
+</body>
+</html>

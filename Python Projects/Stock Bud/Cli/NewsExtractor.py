@@ -6,7 +6,7 @@ import newspaper
 from newspaper import Article
 
 DEFAULT_NEWS_URL = "https://ca.finance.yahoo.com/news/nvidias-2025-has-been-anything-but-easy-and-its-going-to-get-tougher-171847622.html"
-
+NEWS_LIMIT=3
 
 class NewsExtractor:
     
@@ -47,12 +47,12 @@ class NewsExtractor:
         print("Building a newspaper object…")
         paper = newspaper.build(url, memoize_articles=False)
 
-        print("Gathering up to 10 article URLs…")
+        print("Gathering article URLs…")
         url_list = []
         for article in paper.articles:
             if article.url not in url_list:
                 url_list.append(article.url)
-            if len(url_list) == 1:
+            if len(url_list) == NEWS_LIMIT:
                 break
 
         print(f"Collected {len(url_list)} URLs.")

@@ -72,11 +72,14 @@ class NewsInsights:
         return out[0]["generated_text"]
 
 if __name__ == "__main__":
+    print("\n" + "="*80 + "\n")
     extractor = NewsExtractor()
-    articles = extractor.extractNewsFromMainPage("")
+    article = extractor.extractNews("https://www.cnn.com/2025/04/16/investing/us-stock-market/index.html")
     insights = NewsInsights()
-    for news in articles:
-        print(f"# {news.get_title()}\n")
-        print(insights.analyze_economy(news.data))
-        print("\n" + "="*80 + "\n")
+    print(insights.analyze_economy(article.data))
+    print("\n" + "="*80 + "\n")
+    # for news in articles:
+    #     print(f"# {news.get_title()}\n")
+    #     print(insights.analyze_economy(news.data))
+    #     print("\n" + "="*80 + "\n")
 #`pip install huggingface_hub[hf_xet]` or `pip install hf_xet`
