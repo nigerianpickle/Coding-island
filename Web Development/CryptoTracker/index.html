@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Live Crypto Tracker (Lightweight‑Charts)</title>
+  <!-- Lightweight‑Charts standalone bundle -->
+  <script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', cursive;
+      background: #f0f8ff;
+      text-align: center;
+      margin: 0; padding: 20px;
+    }
+    h1 { color: #ff4081; margin-bottom: 5px; }
+    h2 { margin-top: 0; }
+    #menu { margin: 20px 0; }
+    #menu button {
+      font-size:1.1em;font-weight:bold;
+      padding:15px 25px;margin:10px;
+      background:#ffca28;border:3px solid #333;
+      border-radius:10px;cursor:pointer;
+      box-shadow:3px 3px 0 #888;
+    }
+    #menu button:active {
+      box-shadow:1px 1px 0 #888;transform:translate(2px,2px);
+    }
+    #coinSelection { display:none; margin-bottom:20px; }
+    #coinSelection button {
+      font-size:1em;padding:10px 20px;margin:5px;
+      background:#81d4fa;border:3px solid #333;
+      border-radius:8px;cursor:pointer;
+    }
+    #chart-container {
+      position:relative;
+      width:800px; height:400px;
+      margin:0 auto;
+    }
+    #tvchart { /* the lightweight‑charts container */
+      position:absolute; top:0; left:0;
+    }
+    #drawCanvas {
+      position:absolute; top:0; left:0;
+      pointer-events:none;
+    }
+    .active { background:#8bc34a !important; }
+  </style>
+</head>
+<body>
+  <h1>Live Crypto Tracker</h1>
+  <h2 id="coinLabel">Bitcoin (BTC)</h2>
+
+  <div id="menu">
+    <button id="freeBtn">Freehand</button>
+    <button id="lineBtn">Line</button>
+    <button id="undoBtn">Undo</button>
+    <button id="clearBtn">Clear</button>
+    <button id="coinBtn">Change Coin</button>
+  </div>
+
+  <div id="coinSelection">
+    <button class="coin-option" data-id="bitcoin"   data-symbol="BTC">Bitcoin (BTC)</button>
+    <button class="coin-option" data-id="ethereum"  data-symbol="ETH">Ethereum (ETH)</button>
+    <button class="coin-option" data-id="dogecoin"  data-symbol="DOGE">Dogecoin (DOGE)</button>
+  </div>
+
+  <div id="chart-container">
+    <div id="tvchart" style="width:800px; height:400px;"></div>
+    <canvas id="drawCanvas" width="800" height="400"></canvas>
+  </div>
+
+  <script>
+  window.onload = () => {
+    // --- State ---
+    let coinId = 'bitcoin';
+    let coinSym = 'BTC';
+    const vsCur = 'usd';
+    let latestPrice = null;
+    let priceSeriesData = [];
+
+    // --- Create Lightweight‑Chart ---
+    const chart = LightweightCharts.createChart(
+      document.getElementById('tvchart'),
+      {
+        width: 800,
+        height: 400,
+        layout: { backgroundColor: '#ffffff', textColor: '#333' },
+        grid: { vertLines: { color: '#eee' }, horzLines: { color: '#eee' } },
+        timeScale: {
+          timeVisible: true,
+          secondsVisible: true,
+          rightOffset: 2,
+        },
+      }
+    );
+    const series = chart.addLineSeries({
+      color: '#42a5f5',
+      lineWidth: 2,
+    });
+
+    // --- Fetch price every second ---
+    async function fetchPrice() {
+      try {
+        const res = await fetch(
+          `https://api.coingecko.com/api/v3/simple/price?ids=${coinId}&vs_currencies=${vsCur}`
+        );
+        const j = await res.json();
+        latestPrice = j[coinId][vsCur];
+      } catch (e) {
+        console.error('Fetch error:', e);
+      }
+    }
+    async function tick() {
+      await fetchPrice();
+      if (latestPrice !== null) {
+        const now = Math.floor(Date.now() / 1000); // epoch seconds
+        priceSeriesData.push({ time: now, value: latestPrice });
+        // keep last 60 points
+        if (priceSeriesData.length > 60) priceSeriesData.shift();
+        series.setData(priceSeriesData);
+        // auto-scroll
+        chart.timeScale().setVisibleRange({
+          from: priceSeriesData[0].time,
+          to: priceSeriesData[priceSeriesData.length - 1].time,
+        });
+      }
+    }
+    setInterval(tick, 1000);
+    tick();
+
+    // --- Drawing overlay ---
+    const canvas = document.getElementById('drawCanvas');
+    const ctx = canvas.getContext('2d');
+    let mode = null, drawing = false;
+    let paths = [], curr = [], lineStart = null;
+
+    function start(x,y){
+      if(mode==='free'){
+        drawing=true; ctx.beginPath(); ctx.moveTo(x,y);
+        curr=[{x,y}];
+      } else if(mode==='line'){
+        drawing=true; lineStart={x,y};
+      }
+    }
+    function move(x,y){
+      if(mode==='free' && drawing){
+        ctx.lineTo(x,y); ctx.stroke();
+        curr.push({x,y});
+      }
+    }
+    function end(x,y){
+      if(mode==='free' && drawing){
+        drawing=false; paths.push(curr);
+      } else if(mode==='line' && drawing){
+        drawing=false;
+        ctx.beginPath();
+        ctx.moveTo(lineStart.x, lineStart.y);
+        ctx.lineTo(x,y);
+        ctx.stroke();
+        paths.push([
+          { x: lineStart.x, y: lineStart.y },
+          { x, y }
+        ]);
+      }
+    }
+    function redraw(){
+      ctx.clearRect(0,0,canvas.width, canvas.height);
+      ctx.lineWidth=2; ctx.strokeStyle='#000';
+      paths.forEach(p=>{
+        if(!p.length) return;
+        ctx.beginPath();
+        ctx.moveTo(p[0].x, p[0].y);
+        p.slice(1).forEach(pt=>ctx.lineTo(pt.x,pt.y));
+        ctx.stroke();
+      });
+    }
+
+    canvas.addEventListener('mousedown', e=> start(e.offsetX,e.offsetY));
+    canvas.addEventListener('mousemove', e=> move(e.offsetX,e.offsetY));
+    canvas.addEventListener('mouseup',   e=> end(e.offsetX,e.offsetY));
+    canvas.addEventListener('mouseleave',()=> drawing=false);
+
+    // --- UI Buttons ---
+    const freeBtn  = document.getElementById('freeBtn');
+    const lineBtn  = document.getElementById('lineBtn');
+    const undoBtn  = document.getElementById('undoBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const coinBtn  = document.getElementById('coinBtn');
+    const selDiv   = document.getElementById('coinSelection');
+
+    function setMode(m){
+      mode = m;
+      canvas.style.pointerEvents = m ? 'auto' : 'none';
+      freeBtn.classList.toggle('active', m==='free');
+      lineBtn.classList.toggle('active', m==='line');
+    }
+    freeBtn.onclick  = ()=> setMode(mode==='free'? null : 'free');
+    lineBtn.onclick  = ()=> setMode(mode==='line'? null : 'line');
+    undoBtn.onclick  = ()=> { paths.pop(); redraw(); };
+    clearBtn.onclick = ()=> { paths=[]; redraw(); };
+    coinBtn.onclick  = ()=> {
+      selDiv.style.display = selDiv.style.display==='block' ? 'none' : 'block';
+    };
+
+    // --- Coin selection ---
+    document.querySelectorAll('.coin-option').forEach(btn=>{
+      btn.onclick = async ()=>{
+        const id  = btn.dataset.id;
+        const sym = btn.dataset.symbol;
+        if(id !== coinId){
+          coinId = id;
+          coinSym = sym;
+          document.getElementById('coinLabel').textContent = btn.textContent;
+          priceSeriesData = [];
+          series.setData([]);
+          paths = []; redraw();
+        }
+        selDiv.style.display='none';
+        await tick();
+      };
+    });
+  };  
+  </script>
+</body>
+</html>

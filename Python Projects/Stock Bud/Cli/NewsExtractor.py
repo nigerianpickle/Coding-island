@@ -52,7 +52,7 @@ class NewsExtractor:
         for article in paper.articles:
             if article.url not in url_list:
                 url_list.append(article.url)
-            if len(url_list) == 10:
+            if len(url_list) == 1:
                 break
 
         print(f"Collected {len(url_list)} URLs.")
