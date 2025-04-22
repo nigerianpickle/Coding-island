@@ -15,7 +15,9 @@ class NewsInsights:
         insight_model="google/flan-t5-large",
         chat_model="gpt-3.5-turbo"
     ):
-        key = openai_api_key or os.getenv("OPENAI_API_KEY")
+        key = openai_api_key 
+        # or os.getenv("OPENAI_API_KEY")
+        
         if key:
             self.client = OpenAI(api_key=key)
         else:
