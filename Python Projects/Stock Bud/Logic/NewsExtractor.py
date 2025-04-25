@@ -37,6 +37,7 @@ class NewsExtractor:
         self.prevNews[title] = news
         return news
 
+    #
     def extractMultipleNews(self, urls):
         news_list = []
         for url in urls:
@@ -59,6 +60,8 @@ class NewsExtractor:
         return url_list
 
     def extractNewsFromMainPage(self, url):
+        #urls give us a list of article URLs
+        #then we can extract the news from each URL
         urls = self.extractMultipleUrls(url)
         return self.extractMultipleNews(urls)
 

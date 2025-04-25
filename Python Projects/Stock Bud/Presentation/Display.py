@@ -33,9 +33,14 @@ class Display:
         print("Welcome to"+ APP_NAME+ " " + self.user+"!"+"\nEnter a number to get started.")
         
     def options(self):
-        print("1. See summarized news from default articles of main page [WARNING ]")
+        print("1. See summarized news from articles of main page [WARNING]\n2. See summarized news from a specific article\n3. See summarized news for multiple custom urls")
+        
+        
+    def printMessage(self,message):
+        print(message)
     
-    def goodBye(sself):
-        pass
+    def goodBye(self):
+        print("Thanks for using "+ APP_NAME+ " " + self.user+"!")
+        
     
     

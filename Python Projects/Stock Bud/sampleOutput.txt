@@ -1,3 +1,5 @@
+Sample output for tests:
+
 ================================================================================
 
 # La chasse aux niches fiscales, la piste la plus explosive pour un gouvernement en quête d’économie
