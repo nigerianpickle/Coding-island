@@ -1,5 +1,6 @@
 #Actual App for stock bud
-
+import Presentation
+import Logic
 from Presentation import Display
 from Logic import NewsHelper
 
