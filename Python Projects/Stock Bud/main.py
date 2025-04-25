@@ -9,6 +9,7 @@ done=False
 DISPLAY=Display()
 newsHelper=NewsHelper()
 
+#Extracting news from a specific main page
 def extractNewsFromMainPage(url):
     newsHelper.extractNewsFromMainPage(url)
     
