@@ -5,7 +5,7 @@ import os
 import openai
 from openai import OpenAI
 from transformers import pipeline
-from NewsExtractor import NewsExtractor
+from Logic import NewsExtractor
 
 class NewsInsights:
     def __init__(

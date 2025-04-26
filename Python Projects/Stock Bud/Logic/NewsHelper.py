@@ -1,5 +1,5 @@
-from NewsExtractor import NewsExtractor
-from Summarizer import NewsInsights
+from Logic.NewsExtractor import NewsExtractor
+from Logic.Summarizer import NewsInsights
 
 
 
