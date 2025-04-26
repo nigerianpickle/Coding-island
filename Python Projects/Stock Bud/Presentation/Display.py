@@ -11,8 +11,11 @@ class Display:
         pass
     
     
-    def praise():
-        print(random.choices(praises))
+    def praise(self):
+        
+        #Added [0] because random.choices returns a list of one element
+        #This is a workaround for the fact that random.choice returns a single element, not a list
+        print(random.choices(praises)[0])
     
     def setUser(self):
         user=input("Enter your user name")
@@ -30,9 +33,9 @@ class Display:
     
     def welcome(self):
         print("="*80)
-        print("Welcome to"+ APP_NAME+ " " + self.user+"!"+"\nEnter a number to get started.")
+        print("Welcome to"+ APP_NAME+"!")
         
-    def options(self):
+    def printOptions(self):
         print("1. See summarized news from articles of main page [WARNING]\n2. See summarized news from a specific article\n3. See summarized news for multiple custom urls")
         
         
