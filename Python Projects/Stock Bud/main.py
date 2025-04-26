@@ -1,8 +1,8 @@
 #Actual App for stock bud
 import Presentation
 import Logic
-from Presentation import Display
-from Logic import NewsHelper
+from Presentation.Display import Display
+from Logic.NewsHelper import NewsHelper
 
 done=False
 #To support dependency injections
