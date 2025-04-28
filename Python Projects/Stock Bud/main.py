@@ -19,7 +19,8 @@ while not done:
     DISPLAY.welcome()
     DISPLAY.setUser()
     DISPLAY.praise()
-    openAiKey=DISPLAY.getOpenAIKey()
+    # openAiKey=DISPLAY.getOpenAIKey()
+    openAiKey="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"
     DISPLAY.praise()
      #setting the api key
     DISPLAY.printMessage("Setting the API key...")
@@ -49,7 +50,21 @@ while not done:
         DISPLAY.printMessage("News printed successfully.")
         
         
-    done=True
+    if answer == "2":
+        url=input("Enter the url of the article\n")
+        newsExtracted=newsHelper.extractNews(url)
+        
+        if newsExtracted is None:
+            DISPLAY.printMessage("Something went wrong")
+            continue
+        else:
+            DISPLAY.printMessage("News extracted successfully.")
+            DISPLAY.printMessage("Printing News...")
+            newsHelper.printLastNews()
+            DISPLAY.printMessage("News printed successfully.")
+        
+        
+    
         
         
     

@@ -68,6 +68,27 @@ class NewsHelper:
                     print(f"Economic Impact: {economic_impact}\n\n")
                     print(f"="*50+"\n")
 
+
+    def printLastNews(self):
+        print(f"="*50+"\n")
+        if self.lastNews:
+            print(f"Title: {self.lastNews.title}")
+            print(f"Description: {self.lastNews.description}")
+            print(f"Date: {self.lastNews.date}")
+            print(f"Source: {self.lastNews.source}")
+            print(f"Data: {self.lastNews.data}\n")
+            
+            # Summarize the news data using the insights API
+            if self.insights:
+                print(f"="*20 +"Summary"+"="*20)
+                summary = self.insights.summarize(self.lastNews.data)
+                print(f"Summary: {summary}\n\n")
+                print(f"="*20 +"Analysis"+"="*20)
+                analysis = self.insights._analyze_with_openai(self.lastNews.data)
+                print(f"Analysis: {analysis}\n\n")
+                economic_impact = self.insights.analyze_economy(self.lastNews.data)
+                print(f"="*20 +"Economic Impact"+"="*20)
+                print(f"Economic Impact: {economic_impact}\n\n")
                     
                     
 
@@ -77,6 +98,11 @@ class NewsHelper:
     #Set the api key
     def setAPIKey(self,openai_api_key):
         self.insights = NewsInsights(openai_api_key=openai_api_key)
+        
+    def deleteAllNews(self):
+        self.prevNews = {}
+        self.lastNews = None
+        print("All news deleted successfully.")
     
     
     

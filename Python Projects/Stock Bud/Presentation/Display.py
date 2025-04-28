@@ -36,7 +36,7 @@ class Display:
         print("Welcome to "+ APP_NAME+"!")
         
     def printOptions(self):
-        print("1. See summarized news from articles of main page [WARNING]\n2. See summarized news from a specific article\n3. See summarized news for multiple custom urls")
+        print("1. See summarized news from articles of main page [WARNING STILL IN BETA]\n2. See summarized news from a specific article url\n3. See summarized news for multiple custom urls")
         
         
     def printMessage(self,message):
