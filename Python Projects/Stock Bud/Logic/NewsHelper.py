@@ -44,7 +44,7 @@ class NewsHelper:
         
     
     #Prints all News summary 
-    def printSummarizedNews(self):
+    def printAllNews(self):
         if self.prevNews:
             for title, news in self.prevNews.items():
                 print(f"Title: {title}")
