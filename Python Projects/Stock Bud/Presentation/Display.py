@@ -18,7 +18,7 @@ class Display:
         print(random.choices(praises)[0])
     
     def setUser(self):
-        user=input("Enter your user name")
+        user=input("Enter your user name\n")
         try:
             self.user = str(user)
         except Exception as e:
@@ -27,13 +27,13 @@ class Display:
             
     def getOpenAIKey(self):
         print("In order to get started, you would need to have an openaiAPI key[A future revision is coming that would allow users to use mine]")
-        key=input("Enter you openAI api key\n If you are unsure, checkout this link for how to get started!\nhttps://help.openai.com/en/articles/4936850-where-do-i-find-my-openai-api-key")
+        key=input("Enter you openAI api key\n If you are unsure, checkout this link for how to get started!\nhttps://help.openai.com/en/articles/4936850-where-do-i-find-my-openai-api-key\n")
         return key
             
     
     def welcome(self):
         print("="*80)
-        print("Welcome to"+ APP_NAME+"!")
+        print("Welcome to "+ APP_NAME+"!")
         
     def printOptions(self):
         print("1. See summarized news from articles of main page [WARNING]\n2. See summarized news from a specific article\n3. See summarized news for multiple custom urls")
@@ -41,6 +41,9 @@ class Display:
         
     def printMessage(self,message):
         print(message)
+        
+        
+    
     
     def goodBye(self):
         print("Thanks for using "+ APP_NAME+ " " + self.user+"!")

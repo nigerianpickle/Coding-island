@@ -1,6 +1,6 @@
 # Author: Daniel Nwogo
 # Date:   2023-10-04
-from Objects import News
+from Objects.News import News
 import newspaper
 from newspaper import Article
 

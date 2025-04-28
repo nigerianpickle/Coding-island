@@ -35,8 +35,21 @@ while not done:
     
     if answer == "1":
         url=input("Enter the url of the main page\n")
-        newsHelper.extractNewsFromMainPage(url)
-        DISPLAY.printMessage("News extracted successfully.")
+        newsList=newsHelper.extractNewsFromMainPage(url)
+        
+        if newsList is None:
+            DISPLAY.printMessage("Something went wrong")
+            continue
+        else:
+            DISPLAY.printMessage("News extracted successfully.")
+        
+        
+        DISPLAY.printMessage("Printing last news...")
+        newsHelper.printAllNews()
+        DISPLAY.printMessage("News printed successfully.")
+        
+        
+    done=True
         
         
     

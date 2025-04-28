@@ -36,8 +36,24 @@ class NewsHelper:
             return []
         
         else:
+            self.prevNews = {}
+            for news in extractedNews:
+                self.prevNews[news.title] = news
+                self.lastNews = news
             return extractedNews
         
+    
+    #Prints all News summary 
+    def printSummarizedNews(self):
+        if self.prevNews:
+            for title, news in self.prevNews.items():
+                print(f"Title: {title}")
+                print(f"Description: {news.description}")
+                print(f"Date: {news.date}")
+                print(f"Source: {news.source}")
+                print(f"Data: {news.data}\n")
+        else:
+            print("No news available.")
         
     #Set the api key
     def setAPIKey(self,openai_api_key):
