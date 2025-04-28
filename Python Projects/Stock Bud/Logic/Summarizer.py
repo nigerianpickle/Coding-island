@@ -65,7 +65,7 @@ class NewsInsights:
         prompt = (
             "Read the following news article and produce a report in Markdown with these sections:\n"
             "## Summary\nA one‑sentence summary(Break down techincal terms down).\n\n"
-            "## Economic Impact\nHow this will affect the broader economy.(Talk about stock increases, give numbers)\n\n"
+            "## Economic Impact\nHow this will affect the broader economy.(Talk about stock increases/drops, give numbers and historical statistical data)\n\n"
             "## Affected Stocks & Industries\nWhich stocks or sectors will move.\n\n"
             "## Historical Context\nRelevant past events or trends.\n\n"
             f"Article:\n\"\"\"\n{text}\n\"\"\""

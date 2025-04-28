@@ -52,6 +52,25 @@ class NewsHelper:
                 print(f"Date: {news.date}")
                 print(f"Source: {news.source}")
                 print(f"Data: {news.data}\n")
+                
+                # Summarize the news data using the insights API
+                #Check if insights is set and if the news data is not empty
+                if self.insights:
+                    print(f"="*50+"\n")
+                    summary = self.insights.summarize(news.data)
+                    print(f"="*20 +"Summary"+"="*20)
+                    print(f"Summary: {summary}\n\n")
+                    print(f"="*20 +"Analysis"+"="*20)
+                    analysis = self.insights._analyze_with_openai(news.data)
+                    print(f"Analysis: {analysis}\n\n")
+                    print(f"="*20 +"Economic Impact"+"="*20)
+                    economic_impact = self.insights.analyze_economy(news.data)
+                    print(f"Economic Impact: {economic_impact}\n\n")
+                    print(f"="*50+"\n")
+
+                    
+                    
+
         else:
             print("No news available.")
         
