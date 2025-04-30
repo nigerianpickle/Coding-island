@@ -2,12 +2,15 @@ import random
 
 
 APP_NAME="Stock Bud"
+DEFAULT_OPTIONS=["See summarized news from articles of main page [WARNING STILL IN BETA]","See summarized news from a specific article url","See summarized news for multiple custom urls","q to quit"]
 #Deafault display is a command line app
 
 praises=("Nice!","Perfect!","Lemme see..","Wonderful")
 class Display:
+
     def __init__(self):
         self.user=None
+        self.options=DEFAULT_OPTIONS
         pass
     
     
@@ -36,7 +39,11 @@ class Display:
         print("Welcome to "+ APP_NAME+"!")
         
     def printOptions(self):
-        print("1. See summarized news from articles of main page [WARNING STILL IN BETA]\n2. See summarized news from a specific article url\n3. See summarized news for multiple custom urls")
+        pos=1
+        for option in self.options:
+            print(str(pos)+"."+" "+option)
+            pos+=1
+        
         
         
     def printMessage(self,message):

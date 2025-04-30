@@ -13,6 +13,36 @@ newsHelper=NewsHelper()
 def extractNewsFromMainPage(url):
     newsHelper.extractNewsFromMainPage(url)
     
+#Get multiple urls from the user and extract news from them
+def getMultipleUrls():
+    #Get the urls
+    urls=[]
+    
+    done=False
+    
+    while not done:
+        url=input("Enter the url of the article\n")
+        urls.append(url)
+        
+        #Ask if the user wants to add more urls
+        answer=input("Do you want to add more urls? (y/n)\n")
+        
+        if answer.lower() == "n":
+            done=True
+        elif answer.lower() == "y":
+            continue
+        
+    return urls
+
+
+def deleteAllNews(): 
+    DISPLAY.printMessage("Deleting all news...")
+    newsHelper.deleteAllNews()
+    DISPLAY.printMessage("All news deleted successfully.")
+    
+
+    
+    
     
 
 while not done:
@@ -62,6 +92,32 @@ while not done:
             DISPLAY.printMessage("Printing News...")
             newsHelper.printLastNews()
             DISPLAY.printMessage("News printed successfully.")
+            
+            
+    if answer == "3":
+        urls=getMultipleUrls()
+        newsList=newsHelper.extractMultipleNews(urls)
+        
+        
+        for news in newsList:
+            if news is None:
+                DISPLAY.printMessage("Something went wrong")
+                continue
+            else:
+                DISPLAY.printMessage("News extracted successfully.")
+                DISPLAY.printMessage("Printing News...")
+                newsHelper.printAllNews()
+                DISPLAY.printMessage("News printed successfully.")
+    
+    
+    if answer == "q":
+        DISPLAY.goodBye()
+        done=True
+        #Delete all news
+        deleteAllNews()
+                
+    deleteAllNews()
+        
         
         
     

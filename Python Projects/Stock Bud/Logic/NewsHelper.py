@@ -19,6 +19,9 @@ class NewsHelper:
         self.prevNews = {}
 
     
+    def extractMultipleNews(self, urls):
+        self.extractor.extractMultipleNews(urls)
+    
     #Extracts News Summary from one articles
     def extractNews(self, url):
         news = self.extractor.extractNews(url)
@@ -103,6 +106,8 @@ class NewsHelper:
         self.prevNews = {}
         self.lastNews = None
         print("All news deleted successfully.")
+        
+
     
     
     

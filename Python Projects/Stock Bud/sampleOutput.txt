@@ -1,4 +1,4 @@
-Sample output for tests:
+Sample output in first iteration:
 
 ================================================================================
 
@@ -42,3 +42,108 @@ US stocks fell as Federal Reserve Chair Jerome Powell expressed concerns over th
 - The Fear and Greed Index has indicated a prolonged period of "extreme fear" among market participants, reflecting heightened anxiety and caution in response to trade-related uncertainties.
 
 ================================================================================
+
+
+
+
+
+28/04/2025
+SAMPLE output
+
+
+Welcome to Stock Bud!
+Enter your user name
+Daniel
+Wonderful
+Lemme see..
+Setting the API key...
+Device set to use cpu
+Device set to use cpu
+API key set successfully.
+1. See summarized news from articles of main page [WARNING STILL IN BETA]
+2. See summarized news from a specific article url
+3. See summarized news for multiple custom urls
+Enter your choice
+2
+Enter the url of the article
+https://www.cnbc.com/2025/04/27/stock-futures-slip-ahead-of-busy-earnings-week-live-updates.html
+News extracted successfully.
+Printing News...
+==================================================
+
+Title: S&P 500 declines as Big Tech falls before earnings, investors await trade deals: Live updates
+Description:
+Date: 2025-04-27 00:00:00
+Source: https://www.cnbc.com
+Data: A trader works on the floor at the New York Stock Exchange in New York City, U.S., April 28, 2025.
+The S&P 500 fell Monday amid a retreat in shares of Big Tech names ahead of earnings results this week and a lack of progress
+on trade deal negotiations. The broad market index declined 0.3%, while the Nasdaq Composite dropped 0.5%. 
+The Dow Jones Industrial Average traded around the flatline.
+The S&P 500 was bogged down by a pullback in shares of some "Magnificent Seven" companies that are slated to report 
+over the coming days. Amazon fell more than 1%, and Microsoft shed 0.2%.
+
+Nvidia , Alphabet and Tesla also helped lead the index lower, plummeting about 3%, 1.5% and more than 1%, respectively.
+Earnings results have been somewhat strong for the prior quarter, with 73% of companies reporting beating analysts' estimates
+so far — slightly below the 5-year average of 77%, according to FactSet data. Still, Wall Street is lowering expectations for the second quarter and the full year as companies come out with uncertain guidance because of President Donald Trump's tariffs.
+On Monday, Treasury Secretary Scott Bessent offered little clarity on the direction of reaching a possible trade agreement with
+China, but said that the onus was not on the United States. On the positive side, however, Bessent said that they were making 
+progress on other trade proposals, suggesting a deal with India would be "one of the first" to come.
+
+"I believe that it's up to China to de-escalate, because they sell five times more to us than we sell to them, and so these 120%, 
+145% tariffs are unsustainable," Bessent said on CNBC's "Squawk Box."
+His comments come after Trump said last week that discussions with China were underway, refuting China's claims of no trade 
+talks between the two countries.  
+"Recent days have brought indications of some easing in U.S.-China trade tensions, with both sides chipping away at the 
+unsustainable tariff rates implemented earlier this month and the U.S. signaling some intent to deescalate," wrote Barclays economist Jonathan Millar in a recent note. "This is mostly talk, for now, and we remain skeptical that there will be enough concrete momentum in trade discussions to sidestep a U.S. recession."
+
+This week will mark the end of April, which has seen stocks whipsaw across a wide trading range after Trump 
+unveiled his sweeping tariff plans and then later walked some of the stiffer duties back.
+
+So far in April, the S&P 500 is down by almost 2%, sitting more than 10% below its 52-week high reached in late February. The Dow Jones Industrial Average is on track to lose more than 4%, while the Nasdaq Composite is about flat. The S&P 500 briefly entered a bear market on April 7 and has made a recovery since, but the index has failed to break through key resistance levels.
+
+The week also will see multiple reports on the labor market as well as key data on inflation and economic growth. Topping the list will be Friday's nonfarm payrolls release, while first-quarter gross domestic product and the Fed's preferred inflation gauge will be out Wednesday.
+
+====================Summary====================
+Summary:  The broad market index declined 0.3%, while the Nasdaq Composite dropped 0.5% . The S&P 500 was bogged down by a pullback in shares of some "Magnificent Seven" companies . The week will mark the end of April, which has seen stocks
+
+
+====================Analysis====================
+Analysis: ## Summary
+The stock market, particularly the S&P 500 and Nasdaq Composite, experienced a decline on Monday due to a retreat in Big Tech stocks ahead of earnings announcements. This drop was partly influenced by uncertainties surrounding trade deal negotiations, with comments from Treasury Secretary Scott Bessent indicating ongoing tensions with China. Despite some positive signals of easing trade tensions, concerns remain over the impact of tariffs on companies' guidance for the second quarter and the full year.
+
+## Economic Impact
+The mixed signals on trade negotiations and the looming threat of tariffs have contributed to market volatility and uncertainty.
+Companies are adjusting their expectations for future performance, with Wall Street lowering forecasts for the second quarter 
+and beyond. The potential for a U.S. recession remains a concern if concrete progress in trade discussions is not achieved soon.
+The upcoming reports on the labor market, inflation, and economic growth will provide further insights into the overall economic 
+health and potential future market movements.
+
+## Affected Stocks & Industries
+Big Tech companies such as Amazon, Microsoft, Nvidia, Alphabet, and Tesla saw declines in their stock prices, 
+dragging down the S&P 500 and Nasdaq Composite. These companies, part of the "Magnificent Seven" reporting earnings soon, 
+faced pressure as investors adjusted their expectations based on uncertainties surrounding trade policies and tariffs. 
+The broader market volatility has impacted various sectors, with potential repercussions for industries reliant on 
+international trade and global economic conditions.
+
+## Historical Context
+The stock market has been reacting to developments in trade negotiations, particularly with China, and the implications of tariffs
+imposed by President Donald Trump. The market saw fluctuations in April, with the S&P 500 down nearly 2% and struggling to break 
+through key resistance levels. The ongoing trade tensions have added to existing concerns about economic growth and corporate 
+performance, highlighting the importance of trade policy decisions on market stability and investor confidence.
+
+
+====================Economic Impact====================
+Economic Impact: ## Summary
+The S&P 500 fell by 0.3% amid a retreat in Big Tech stocks ahead of earnings reports and uncertainty surrounding trade deal negotiations with China. Earnings results for the prior quarter were somewhat strong, but companies are providing uncertain guidance due to President Trump's tariffs. Treasury Secretary Scott Bessent mentioned progress on trade proposals with India, but uncertainty remains regarding a trade deal with China. The stock market has been volatile in April due to tariff announcements and reversals by Trump.
+
+## Economic Impact
+The uncertainty surrounding trade negotiations with China and the impact of President Trump's tariffs are weighing on market sentiment. Companies are facing challenges in providing guidance for future quarters, leading to a cautious outlook among investors. The upcoming reports on the labor market, inflation, and economic growth will be closely watched for further insights into the health of the economy.
+
+## Affected Stocks & Industries
+Big Tech companies such as Amazon, Microsoft, Nvidia, Alphabet, and Tesla saw their stock prices decline, contributing to the overall drop in the S&P 500 and Nasdaq Composite. These companies are part of the "Magnificent Seven" that are set to report earnings soon. The uncertainty surrounding trade negotiations is affecting various sectors, especially those with significant exposure to international markets.
+
+## Historical Context
+The stock market has experienced volatility in April, with the S&P 500 down by almost 2% from its 52-week high reached in late February. The Dow Jones Industrial Average is on track to lose more than 4%, while the Nasdaq Composite has remained relatively flat. The market briefly entered a bear market in early April but has since recovered. The ongoing trade tensions and upcoming economic data releases are likely to continue influencing market movements in the near term.
+
+
+News printed successfully.
