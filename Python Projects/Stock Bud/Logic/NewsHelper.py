@@ -20,15 +20,19 @@ class NewsHelper:
 
     
     def extractMultipleNews(self, urls):
-        self.extractor.extractMultipleNews(urls)
+        return self.extractor.extractMultipleNews(urls)
     
     #Extracts News Summary from one articles
     def extractNews(self, url):
         news = self.extractor.extractNews(url)
         if news:
             self.lastNews = news
+            print("Here's the title:"+news.title)
+            
             self.prevNews[news.title] = news
             return news
+        
+        print("Something went wrong")
         return None
     
     #Extracts News summary from the Entire Main page
@@ -48,9 +52,10 @@ class NewsHelper:
     
     #Prints all News summary 
     def printAllNews(self):
-        if self.prevNews:
-            for title, news in self.prevNews.items():
-                print(f"Title: {title}")
+            print(len(self.prevNews.values()))
+            for news in self.prevNews.values():
+                
+                print(f"Title: {news.title}")
                 print(f"Description: {news.description}")
                 print(f"Date: {news.date}")
                 print(f"Source: {news.source}")

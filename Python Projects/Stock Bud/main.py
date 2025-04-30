@@ -98,12 +98,12 @@ while not done:
         urls=getMultipleUrls()
         newsList=newsHelper.extractMultipleNews(urls)
         
-        
+        print(len(newsList))        
         for news in newsList:
-            if news is None:
-                DISPLAY.printMessage("Something went wrong")
-                continue
-            else:
+            # if news is None:
+            #     DISPLAY.printMessage("Something went wrong")
+            #     continue
+            #else:
                 DISPLAY.printMessage("News extracted successfully.")
                 DISPLAY.printMessage("Printing News...")
                 newsHelper.printAllNews()

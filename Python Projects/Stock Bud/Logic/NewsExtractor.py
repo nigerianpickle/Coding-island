@@ -20,6 +20,7 @@ class NewsExtractor:
 
     def extractNews(self, url):
         # download & parse without NLP/summary
+        print(f"Extracting news from {url}…")
         article = Article(url)
         article.download()
         article.parse()
@@ -41,6 +42,7 @@ class NewsExtractor:
         news_list = []
         for url in urls:
             news_list.append(self.extractNews(url))
+            
         return news_list
 
     def extractMultipleUrls(self, url):
