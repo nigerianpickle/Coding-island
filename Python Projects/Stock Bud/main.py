@@ -43,7 +43,7 @@ def deleteAllNews():
 
     
     
-    
+    q
 
 while not done:
     DISPLAY.welcome()
