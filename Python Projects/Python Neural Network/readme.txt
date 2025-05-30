@@ -34,6 +34,39 @@ when we pass it into  our model it becomes
 =7
 
 
-when we pass that into the function f(7) the article alledgely says we 
+when we pass that into the sigmoid function f(7) 
 
 
+
+Training a neural network:
+
+Say we have the measurements:
+Name	Weight (lb)	Height (in)	Gender
+Alice	   133	       65	      F
+Bob	        160	       72	      M
+Charlie	   152	        70	      M
+Diana	   120	        60	      F
+
+
+In order to make it easier for a computer to use we change the genders to 0 and 1
+We also perform  shifting on the values using the average
+
+
+Say we have the measurements:
+Name	Weight (lb)	Height (in)	Gender
+Alice	   133	       65	      F
+Bob	        160	       72	      M
+Charlie	   152	        70	      M
+Diana	   120	        60	      F
+
+
+
+Before we also train, we need to identify the loss:
+We will use  mean squared error to identify the difference between what our prediction was and the actual value
+
+the better our prediction, the lower our loss will be
+
+
+
+
+After we get the loss, we have a goal. To minimize this loss

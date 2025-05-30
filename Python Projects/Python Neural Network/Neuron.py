@@ -13,6 +13,11 @@ class Neuron:
         
         
     def feedfoward(self,inputs):
+        #e.g inputs=[1,2]
+        #weights=[0.5,0.5]
+        #bias=0.5
+        #total=np.dot(weights,inputs)+bias
+        #total=(1*0.5 + 2*0.5) + 0.5 = 2.5
         total=np.dot(self.weights,inputs)+self.bias
         return sigmoid(total)
     
