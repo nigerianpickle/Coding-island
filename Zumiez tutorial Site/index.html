@@ -2,134 +2,202 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Quirky Tutorial Gallery</title>
+  <title>Work Tutorials</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     .annotation {
-      @apply absolute bg-white text-black text-xs px-2 py-1 rounded shadow-lg;
+      @apply absolute bg-white text-black text-xs px-2 py-1 rounded shadow-lg transition-all duration-500;
+    }
+    .fade-in {
+      opacity: 0;
+      animation: fadeIn 0.8s ease-in-out forwards;
+    }
+    .zoom {
+      animation: zoomIn 0.6s ease-in-out forwards;
+    }
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+    @keyframes zoomIn {
+      0% { transform: scale(0.95); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
     }
   </style>
 </head>
-<body class="bg-gray-900 text-white font-sans min-h-screen flex flex-col items-center justify-start p-6">
-  <h1 class="text-4xl font-bold mb-6">🛠️ Work Tutorials</h1>
+<body class="bg-zinc-900 text-white font-sans min-h-screen overflow-x-hidden">
+  <div class="max-w-7xl mx-auto px-6 py-10 fade-in">
+    <h1 class="text-5xl font-extrabold mb-10 text-center text-purple-400 animate-bounce">📚 Training Portal</h1>
 
-  <!-- Tutorial List -->
-  <div class="w-full max-w-6xl flex gap-4">
-    <div class="w-1/3 space-y-3">
-      <h2 class="text-xl font-semibold mb-2">Select a Tutorial:</h2>
-      <ul class="space-y-2">
-        <li><button onclick="showGallery('buildBoard')" class="block w-full bg-gray-800 hover:bg-gray-700 px-4 py-2 rounded transition transform hover:scale-105">How to build a board</button></li>
-        <li><button onclick="showGallery('taxForms')" class="block w-full bg-gray-800 hover:bg-gray-700 px-4 py-2 rounded transition transform hover:scale-105">How to print out tax forms</button></li>
-        <li><button onclick="showGallery('refund')" class="block w-full bg-gray-800 hover:bg-gray-700 px-4 py-2 rounded transition transform hover:scale-105">How to do a basic refund</button></li>
-      </ul>
-    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <!-- Sidebar -->
+      <div class="bg-zinc-800 p-4 rounded-lg shadow-md animate-slide-in-left">
+        <h2 class="text-xl font-semibold mb-4">Tutorials</h2>
+        <ul class="space-y-2">
+          <li><button onclick="showTutorial('sevenSteps')" class="w-full text-left bg-zinc-700 hover:bg-purple-700 px-4 py-2 rounded transition-all">Seven Steps to Selling</button></li>
 
-    <!-- Gallery -->
-    <div id="gallery" class="w-2/3 bg-gray-800 rounded-lg p-4 relative">
-      <div id="galleryImageWrapper" class="relative h-96 overflow-hidden rounded">
-        <img id="galleryImage" src="" alt="Tutorial Step" class="w-full h-full object-cover transition-all duration-700 ease-in-out rounded">
-        <div id="annotation1" class="annotation hidden top-4 left-4">Step 1: Click the board slot</div>
-        <div id="annotation2" class="annotation hidden bottom-4 right-4">Step 2: Add pieces here</div>
+          <li><button onclick="showTutorial('buildBoard')" class="w-full text-left bg-zinc-700 hover:bg-purple-700 px-4 py-2 rounded transition-all">Build a Board</button></li>
+          <li><button onclick="showTutorial('taxForms')" class="w-full text-left bg-zinc-700 hover:bg-purple-700 px-4 py-2 rounded transition-all">Print Tax Forms</button></li>
+          <li><button onclick="showTutorial('refund')" class="w-full text-left bg-zinc-700 hover:bg-purple-700 px-4 py-2 rounded transition-all">Basic Refund</button></li>
+        </ul>
       </div>
 
-      <!-- Navigation Buttons -->
-      <div class="flex justify-between mt-4">
-        <button onclick="prevImage()" class="bg-purple-600 hover:bg-purple-500 px-4 py-2 rounded">← Prev</button>
-        <button onclick="nextImage()" class="bg-purple-600 hover:bg-purple-500 px-4 py-2 rounded">Next →</button>
+      <!-- Tutorial Viewer -->
+      <div id="viewer" class="md:col-span-2 bg-zinc-800 p-6 rounded-lg relative shadow-lg">
+        <h2 id="tutorialTitle" class="text-2xl font-bold mb-4">Select a Tutorial</h2>
+
+        <div class="relative h-80 mb-4 overflow-hidden">
+          <img id="tutorialImage" src="./img/tutorial-logo.jpg" class="w-full h-full object-cover rounded transition-all duration-700 ease-in-out zoom" alt="Tutorial step">
+          <div id="annotation" class="annotation hidden top-2 left-2">Step info</div>
+        </div>
+
+        <p id="tutorialText" class="mb-4 text-sm text-gray-300 transition-opacity duration-500">Instructions will appear here.</p>
+
+        <div class="flex justify-between">
+          <button onclick="prevStep()" class="bg-purple-600 hover:bg-purple-500 px-4 py-2 rounded transition-transform hover:scale-105">← Prev</button>
+          <button onclick="nextStep()" class="bg-purple-600 hover:bg-purple-500 px-4 py-2 rounded transition-transform hover:scale-105">Next →</button>
+        </div>
       </div>
     </div>
   </div>
 
   <script>
-    const galleries = {
+    const tutorials = {
+            sevenSteps: {
+        title: "Seven steps to selling",
+        steps: [
+          {
+            img: "img1.jpg",
+            annotation: { text: "Open the board package", pos: "top-2 left-2" },
+            text: "Begin by opening the board package. Carefully lay out all parts."
+          },
+          {
+            img: "img2.jpg",
+            annotation: { text: "Align connectors", pos: "bottom-4 right-4" },
+            text: "Align all connectors properly before assembling."
+          },
+          {
+            img: "img3.jpg",
+            annotation: { text: "Final step!", pos: "top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" },
+            text: "Screw down all parts and confirm everything is secure."
+          }
+        ]
+      },
+                  sevenSteps: {
+        title: "Seven steps to selling",
+        steps: [
+          {
+            img: "img1.jpg",
+            annotation: { text: "Open the board package", pos: "top-2 left-2" },
+            text: "Begin by opening the board package. Carefully lay out all parts."
+          },
+          {
+            img: "img2.jpg",
+            annotation: { text: "Align connectors", pos: "bottom-4 right-4" },
+            text: "Align all connectors properly before assembling."
+          },
+          {
+            img: "img3.jpg",
+            annotation: { text: "Final step!", pos: "top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" },
+            text: "Screw down all parts and confirm everything is secure."
+          }
+        ]
+      },
       buildBoard: {
-        images: ['img1.jpg', 'img2.jpg', 'img3.jpg'],
-        annotations: [
-          ['Step 1: Click the board slot', 'top-4 left-4'],
-          ['Step 2: Add pieces here', 'bottom-4 right-4'],
-          ['Step 3: Confirm assembly', 'top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2']
+        title: "How to Build a Board",
+        steps: [
+          {
+            img: "img1.jpg",
+            annotation: { text: "Open the board package", pos: "top-2 left-2" },
+            text: "Begin by opening the board package. Carefully lay out all parts."
+          },
+          {
+            img: "img2.jpg",
+            annotation: { text: "Align connectors", pos: "bottom-4 right-4" },
+            text: "Align all connectors properly before assembling."
+          },
+          {
+            img: "img3.jpg",
+            annotation: { text: "Final step!", pos: "top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" },
+            text: "Screw down all parts and confirm everything is secure."
+          }
         ]
       },
       taxForms: {
-        images: ['img4.jpg', 'img5.jpg'],
-        annotations: [
-          ['Go to Settings > Tax', 'top-4 left-4'],
-          ['Print selected tax form', 'bottom-4 left-4']
+        title: "How to Print Tax Forms",
+        steps: [
+          {
+            img: "img4.jpg",
+            annotation: { text: "Settings menu", pos: "top-2 left-2" },
+            text: "Navigate to the settings menu on your POS system."
+          },
+          {
+            img: "img5.jpg",
+            annotation: { text: "Print form", pos: "bottom-2 left-2" },
+            text: "Select the tax form you want and hit print."
+          }
         ]
       },
       refund: {
-        images: ['img6.jpg', 'img7.jpg'],
-        annotations: [
-          ['Scan the item', 'top-6 left-6'],
-          ['Press REFUND button', 'bottom-6 right-6']
+        title: "How to Do a Basic Refund",
+        steps: [
+          {
+            img: "img6.jpg",
+            annotation: { text: "Scan item", pos: "top-2 left-2" },
+            text: "Scan the returned item into the POS."
+          },
+          {
+            img: "img7.jpg",
+            annotation: { text: "Confirm refund", pos: "bottom-4 right-4" },
+            text: "Confirm the refund and print the receipt."
+          }
         ]
       }
     };
 
     let currentTutorial = null;
-    let currentIndex = 0;
+    let currentStep = 0;
 
-    function showGallery(name) {
-      currentTutorial = galleries[name];
-      currentIndex = 0;
-      updateGallery();
+    function showTutorial(key) {
+      currentTutorial = tutorials[key];
+      currentStep = 0;
+      updateStep();
     }
 
-    function updateGallery() {
+    function updateStep() {
       if (!currentTutorial) return;
-      const imgEl = document.getElementById('galleryImage');
-      imgEl.src = currentTutorial.images[currentIndex];
+      const step = currentTutorial.steps[currentStep];
+      document.getElementById('tutorialTitle').textContent = currentTutorial.title;
 
-      // Update annotations
-      const annotation1 = document.getElementById('annotation1');
-      const annotation2 = document.getElementById('annotation2');
+      const img = document.getElementById('tutorialImage');
+      img.classList.remove('zoom');
+      void img.offsetWidth;
+      img.classList.add('zoom');
+      img.src = step.img;
 
-      annotation1.classList.add('hidden');
-      annotation2.classList.add('hidden');
+      const annotation = document.getElementById('annotation');
+      annotation.textContent = step.annotation.text;
+      annotation.className = `annotation ${step.annotation.pos}`;
+      annotation.classList.remove('hidden');
 
-      const annots = currentTutorial.annotations[currentIndex];
-      if (annots) {
-        annotation1.textContent = annots[0];
-        annotation1.className = `annotation ${annots[1]} opacity-0 animate-fadeIn`;
-        annotation1.classList.remove('hidden');
-
-        // Show a second one only if needed
-        if (annots.length > 2) {
-          annotation2.textContent = annots[2];
-          annotation2.className = `annotation ${annots[3]} opacity-0 animate-fadeIn`;
-          annotation2.classList.remove('hidden');
-        }
-      }
+      const text = document.getElementById('tutorialText');
+      text.style.opacity = 0;
+      setTimeout(() => {
+        text.textContent = step.text;
+        text.style.opacity = 1;
+      }, 200);
     }
 
-    function nextImage() {
+    function nextStep() {
       if (!currentTutorial) return;
-      currentIndex = (currentIndex + 1) % currentTutorial.images.length;
-      updateGallery();
+      currentStep = (currentStep + 1) % currentTutorial.steps.length;
+      updateStep();
     }
 
-    function prevImage() {
+    function prevStep() {
       if (!currentTutorial) return;
-      currentIndex = (currentIndex - 1 + currentTutorial.images.length) % currentTutorial.images.length;
-      updateGallery();
+      currentStep = (currentStep - 1 + currentTutorial.steps.length) % currentTutorial.steps.length;
+      updateStep();
     }
-
-    // Optional: Tailwind animation
-    tailwind.config = {
-      theme: {
-        extend: {
-          animation: {
-            fadeIn: 'fadeIn 0.5s ease-out forwards'
-          },
-          keyframes: {
-            fadeIn: {
-              '0%': { opacity: 0 },
-              '100%': { opacity: 1 }
-            }
-          }
-        }
-      }
-    };
   </script>
 </body>
 </html>
