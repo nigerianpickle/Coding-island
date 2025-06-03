@@ -10,10 +10,28 @@ class NeuralNetwork:
         
         
         #Hidden layer
-        self.h1==Neuron(sel.weights,self.bias)
+        self.h1=Neuron(self.weights,self.bias)
         self.h2 = Neuron(self.weights, self.bias)
         
         
         #Output layer
         self.o1 = Neuron(self.weights, self.bias)
+        
+        
+    def feedFoward(self, input):
+        
+        output_h1=self.h1.feedfoward(input)
+        output_h2=self.h2.feedfoward(input)
+        
+        output_o1 = self.o1.feedfoward(np.array([output_h1, output_h2]))
+        
+        return output_o1
+    
+    
+    
+    
+    
+network=NeuralNetwork()
+print(network.feedFoward(np.array([9, 2])))  # Example input
+        
         

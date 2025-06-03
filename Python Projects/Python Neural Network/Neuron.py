@@ -7,7 +7,7 @@ def sigmoid(x):
 
 
 class Neuron:
-    def __init(self,weights,bias):
+    def __init__(self,weights,bias):
         self.weights=weights
         self.bias=bias
         
