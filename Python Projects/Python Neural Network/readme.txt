@@ -70,3 +70,14 @@ the better our prediction, the lower our loss will be
 
 
 After we get the loss, we have a goal. To minimize this loss
+
+I will fill in the math details later, maybe when i want to specialize but i would be writing nonsense if iii went inot the details.
+But the idea is basically we get a Loss when we feed our input in, and these
+Losses grow exponentially, meaning we want to find values thhat reduce this loss
+
+
+Treating the Loss as a function of weights, we basically try to find values that would give us a lower loss? I think
+
+
+
+
