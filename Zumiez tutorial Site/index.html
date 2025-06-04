@@ -35,6 +35,7 @@
         <ul class="space-y-2">
           <li><button onclick="showTutorial('sevenSteps')" class="w-full text-left bg-zinc-700 hover:bg-purple-700 px-4 py-2 rounded transition-all">Seven Steps to Selling</button></li>
           <li><button onclick="showTutorial('refund')" class="w-full text-left bg-zinc-700 hover:bg-purple-700 px-4 py-2 rounded transition-all">How to do Basic Refund</button></li>
+          <li><button onclick="showTutorial('exchange')" class="w-full text-left bg-zinc-700 hover:bg-purple-700 px-4 py-2 rounded transition-all">How to do Basic Exchange</button></li>
           <li><button onclick="showTutorial('buildBoard')" class="w-full text-left bg-zinc-700 hover:bg-purple-700 px-4 py-2 rounded transition-all">How to Build a Board</button></li>
 
         </ul>
@@ -61,7 +62,7 @@
 
   <script>
     const tutorials = {
-            sevenSteps: {
+        sevenSteps: {
         title: "Seven steps to selling",
         steps: [
           {
@@ -109,7 +110,62 @@
           {
             img: "img6.jpg",
             annotation: { text: "Scan item", pos: "top-2 left-2" },
-            text: "Scan the returned item into the POS."
+            text: "Offer an exchange, Just in case the customer would prefer that."
+          },
+          {
+            img: "img6.jpg",
+            annotation: { text: "Scan item", pos: "top-2 left-2" },
+            text: "If the customer prefers a refund, ask for proof of purchase.(We do not accept returns without one)"
+          },
+          {
+            img: "img5.jpg",
+            annotation: { text: "Select refund option", pos: "bottom-4 right-4" },
+            text: "When you have gotten proof, log into the POS system and select {transaction}."
+          },
+          {
+            img: "img4.jpg",
+            annotation: { text: "Enter amount", pos: "top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" },
+            text: "the next window should be a pop like this"
+          },
+          {
+            img: "img6.jpg",
+            annotation: { text: "Process refund", pos: "top-2 left-2" },
+            text: "Process the refund through the payment system."
+          },
+          {
+            img: "img7.jpg",
+            annotation: { text: "Confirm refund", pos: "bottom-4 right-4" },
+            text: "Confirm the refund and print the receipt."
+          }
+        ]
+      },
+      exchange: {
+        title: "How to Do a Basic Exchange",
+        steps: [
+          {
+            img: "img6.jpg",
+            annotation: { text: "Scan item", pos: "top-2 left-2" },
+            text: "Ask whether the custome would like to exchange or refund the item."
+          },
+          {
+            img: "img6.jpg",
+            annotation: { text: "Scan item", pos: "top-2 left-2" },
+            text: "If the cu"
+          },
+          {
+            img: "img5.jpg",
+            annotation: { text: "Select refund option", pos: "bottom-4 right-4" },
+            text: "Select the refund option in the POS system."
+          },
+          {
+            img: "img4.jpg",
+            annotation: { text: "Enter amount", pos: "top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" },
+            text: "Enter the amount to be refunded."
+          },
+          {
+            img: "img6.jpg",
+            annotation: { text: "Process refund", pos: "top-2 left-2" },
+            text: "Process the refund through the payment system."
           },
           {
             img: "img7.jpg",
