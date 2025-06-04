@@ -34,10 +34,9 @@
         <h2 class="text-xl font-semibold mb-4">Tutorials</h2>
         <ul class="space-y-2">
           <li><button onclick="showTutorial('sevenSteps')" class="w-full text-left bg-zinc-700 hover:bg-purple-700 px-4 py-2 rounded transition-all">Seven Steps to Selling</button></li>
-          <li><button onclick="showTutorial('wrongCashAmount')" class="w-full text-left bg-zinc-700 hover:bg-purple-700 px-4 py-2 rounded transition-all">Seven Steps to Selling</button></li>
-          <li><button onclick="showTutorial('buildBoard')" class="w-full text-left bg-zinc-700 hover:bg-purple-700 px-4 py-2 rounded transition-all">Build a Board</button></li>
-          <li><button onclick="showTutorial('taxForms')" class="w-full text-left bg-zinc-700 hover:bg-purple-700 px-4 py-2 rounded transition-all">Print Tax Forms</button></li>
-          <li><button onclick="showTutorial('refund')" class="w-full text-left bg-zinc-700 hover:bg-purple-700 px-4 py-2 rounded transition-all">Basic Refund</button></li>
+          <li><button onclick="showTutorial('refund')" class="w-full text-left bg-zinc-700 hover:bg-purple-700 px-4 py-2 rounded transition-all">How to do Basic Refund</button></li>
+          <li><button onclick="showTutorial('buildBoard')" class="w-full text-left bg-zinc-700 hover:bg-purple-700 px-4 py-2 rounded transition-all">How to Build a Board</button></li>
+
         </ul>
       </div>
 
@@ -66,12 +65,12 @@
         title: "Seven steps to selling",
         steps: [
           {
-            img: "img1.jpg",
+            img: "./img/step1.png",
             annotation: { text: "Open the board package", pos: "top-2 left-2" },
             text: "Greet the customer"
           },
           {
-            img: "img2.jpg",
+            img: "./img/step2.png",
             annotation: { text: "Align connectors", pos: "bottom-4 right-4" },
             text: "Build rapport with the customer"
           },
@@ -79,26 +78,43 @@
             img: "img3.jpg",
             annotation: { text: "Final step!", pos: "top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" },
             text: "Identify the customer's needs and wants"
-          }
-        ]
-      },
-        wrongCashAmount: {
-        title: "Oh no i entered the wrong cash amount",
-        steps: [
-          {
-            img: "img1.jpg",
-            annotation: { text: "Open the board package", pos: "top-2 left-2" },
-            text: "Give the customer the correct change.(Find the nearest calculator if needed)"
-          },
-          {
-            img: "img2.jpg",
-            annotation: { text: "Align connectors", pos: "bottom-4 right-4" },
-            text: "Align all connectors properly before assembling."
           },
           {
             img: "img3.jpg",
             annotation: { text: "Final step!", pos: "top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" },
-            text: "Screw down all parts and confirm everything is secure."
+            text: "Product knowledge and recommendations"
+          },
+          {
+            img: "img3.jpg",
+            annotation: { text: "Final step!", pos: "top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" },
+            text: "Alternatives and advice"
+          },
+          {
+            img: "img3.jpg",
+            annotation: { text: "Final step!", pos: "top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" },
+            text: "Suggest add-ons and accessories"
+          },
+          {
+            img: "img3.jpg",
+            annotation: { text: "Final step!", pos: "top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" },
+            text: "Continue the experience with the customer"
+          },
+
+
+        ]
+      },
+      refund: {
+        title: "How to Do a Basic Refund",
+        steps: [
+          {
+            img: "img6.jpg",
+            annotation: { text: "Scan item", pos: "top-2 left-2" },
+            text: "Scan the returned item into the POS."
+          },
+          {
+            img: "img7.jpg",
+            annotation: { text: "Confirm refund", pos: "bottom-4 right-4" },
+            text: "Confirm the refund and print the receipt."
           }
         ]
       },
@@ -119,36 +135,6 @@
             img: "img3.jpg",
             annotation: { text: "Final step!", pos: "top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" },
             text: "Screw down all parts and confirm everything is secure."
-          }
-        ]
-      },
-      taxForms: {
-        title: "How to Print Tax Forms",
-        steps: [
-          {
-            img: "img4.jpg",
-            annotation: { text: "Settings menu", pos: "top-2 left-2" },
-            text: "Navigate to the settings menu on your POS system."
-          },
-          {
-            img: "img5.jpg",
-            annotation: { text: "Print form", pos: "bottom-2 left-2" },
-            text: "Select the tax form you want and hit print."
-          }
-        ]
-      },
-      refund: {
-        title: "How to Do a Basic Refund",
-        steps: [
-          {
-            img: "img6.jpg",
-            annotation: { text: "Scan item", pos: "top-2 left-2" },
-            text: "Scan the returned item into the POS."
-          },
-          {
-            img: "img7.jpg",
-            annotation: { text: "Confirm refund", pos: "bottom-4 right-4" },
-            text: "Confirm the refund and print the receipt."
           }
         ]
       }
