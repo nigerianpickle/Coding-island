@@ -30,14 +30,13 @@
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
       <!-- Sidebar -->
-      <div class="bg-zinc-800 p-4 rounded-lg shadow-md animate-slide-in-left">
+      <div class="bg-zinc-800 p-4 rounded-lg shadow-md">
         <h2 class="text-xl font-semibold mb-4">Tutorials</h2>
         <ul class="space-y-2">
           <li><button onclick="showTutorial('sevenSteps')" class="w-full text-left bg-zinc-700 hover:bg-purple-700 px-4 py-2 rounded transition-all">Seven Steps to Selling</button></li>
           <li><button onclick="showTutorial('refund')" class="w-full text-left bg-zinc-700 hover:bg-purple-700 px-4 py-2 rounded transition-all">How to do Basic Refund</button></li>
           <li><button onclick="showTutorial('exchange')" class="w-full text-left bg-zinc-700 hover:bg-purple-700 px-4 py-2 rounded transition-all">How to do Basic Exchange</button></li>
           <li><button onclick="showTutorial('buildBoard')" class="w-full text-left bg-zinc-700 hover:bg-purple-700 px-4 py-2 rounded transition-all">How to Build a Board</button></li>
-
         </ul>
       </div>
 
@@ -50,7 +49,10 @@
           <div id="annotation" class="annotation hidden top-2 left-2">Step info</div>
         </div>
 
-        <p id="tutorialText" class="mb-4 text-sm text-gray-300 transition-opacity duration-500">Instructions will appear here.</p>
+        <div class="mb-4">
+          <p id="tutorialText" class="text-sm text-gray-300 transition-opacity duration-500">Instructions will appear here.</p>
+          <p id="tutorialWhy" class="mt-2 text-xs text-gray-400 italic">Why this step matters...</p>
+        </div>
 
         <div class="flex justify-between">
           <button onclick="prevStep()" class="bg-purple-600 hover:bg-purple-500 px-4 py-2 rounded transition-transform hover:scale-105">← Prev</button>
@@ -62,48 +64,7 @@
 
   <script>
     const tutorials = {
-        sevenSteps: {
-        title: "Seven steps to selling",
-        steps: [
-          {
-            img: "./img/step1.png",
-            annotation: { text: "Open the board package", pos: "top-2 left-2" },
-            text: "Greet the customer"
-          },
-          {
-            img: "./img/step2.png",
-            annotation: { text: "Align connectors", pos: "bottom-4 right-4" },
-            text: "Build rapport with the customer"
-          },
-          {
-            img: "./img/step3.png",
-            annotation: { text: "Final step!", pos: "top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" },
-            text: "Identify the customer's needs and wants"
-          },
-          {
-            img: "./img/step4.png",
-            annotation: { text: "Final step!", pos: "top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" },
-            text: "Product knowledge and recommendations"
-          },
-          {
-            img: "./img/step5.png",
-            annotation: { text: "Final step!", pos: "top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" },
-            text: "Alternatives and advice"
-          },
-          {
-            img: "./img/step6.png",
-            annotation: { text: "Final step!", pos: "top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" },
-            text: "Suggest add-ons and accessories"
-          },
-          {
-            img: "./img/step7.png",
-            annotation: { text: "Final step!", pos: "top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" },
-            text: "Continue the experience with the customer"
-          },
 
-
-        ]
-      },
       refund: {
         title: "How to Do a Basic Refund",
         steps: [
@@ -206,8 +167,54 @@
           }
 
         ]
+      },
+      sevenSteps: {
+        title: "Seven steps to selling",
+        steps: [
+          {
+            img: "./img/step1.png",
+            annotation: { text: "Open the board package", pos: "top-2 left-2" },
+            text: "Greet the customer",
+            why: "This sets the tone for the interaction and makes the customer feel acknowledged."
+          },
+          {
+            img: "./img/step2.png",
+            annotation: { text: "Align connectors", pos: "bottom-4 right-4" },
+            text: "Build rapport with the customer",
+            why: "Building trust helps the customer open up and share their needs."
+          },
+          {
+            img: "./img/step3.png",
+            annotation: { text: "Final step!", pos: "top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" },
+            text: "Identify the customer's needs and wants",
+            why: "Knowing what they’re looking for helps provide accurate recommendations."
+          },
+          {
+            img: "./img/step4.png",
+            annotation: { text: "Final step!", pos: "top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" },
+            text: "Product knowledge and recommendations",
+            why: "Informed advice increases the chance of a sale."
+          },
+          {
+            img: "./img/step5.png",
+            annotation: { text: "Final step!", pos: "top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" },
+            text: "Alternatives and advice",
+            why: "Offering choices shows you understand the customer’s situation."
+          },
+          {
+            img: "./img/step6.png",
+            annotation: { text: "Final step!", pos: "top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" },
+            text: "Suggest add-ons and accessories",
+            why: "Upselling adds value and can improve the customer’s experience."
+          },
+          {
+            img: "./img/step7.png",
+            annotation: { text: "Final step!", pos: "top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" },
+            text: "Continue the experience with the customer",
+            why: "Building long-term relationships leads to return business."
+          }
+        ]
       }
-
     };
 
     let currentTutorial = null;
@@ -235,12 +242,8 @@
       annotation.className = `annotation ${step.annotation.pos}`;
       annotation.classList.remove('hidden');
 
-      const text = document.getElementById('tutorialText');
-      text.style.opacity = 0;
-      setTimeout(() => {
-        text.textContent = step.text;
-        text.style.opacity = 1;
-      }, 200);
+      document.getElementById('tutorialText').textContent = step.text;
+      document.getElementById('tutorialWhy').textContent = step.why || '';
     }
 
     function nextStep() {
