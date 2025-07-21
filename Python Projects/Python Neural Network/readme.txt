@@ -1,3 +1,15 @@
+You can play around with my version by running NeuralNetworkTest.
+I got the csv data from kaggle, found the average male and female heights and shifted the values in the dataset
+based on that
+this way i am able to use the data for the example
+
+
+
+Technologies used:
+Python,Excel,Pandas,Numpy
+
+
+
 Implementation of a neural network from sratch
 
 I followed the tutorial provided by: https://victorzhou.com/blog/intro-to-neural-networks/
@@ -95,5 +107,7 @@ N is a constant called thre learning rate.
 This controls how fast we train
 
 Not really understandign the math here lol, just movnig on
+
+
 
 
