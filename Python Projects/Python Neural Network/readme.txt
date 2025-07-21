@@ -106,7 +106,7 @@ w1<- w1- n L/w1
 N is a constant called thre learning rate.
 This controls how fast we train
 
-Not really understandign the math here lol, just movnig on
+
 
 
 
