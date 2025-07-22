@@ -1,0 +1,16 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+/* Hero section */
+.hero {
+
+    padding: 20rem;
+    background-color: aqua;
+
+}
+
+.hero h1 {
+    color: white;
+}

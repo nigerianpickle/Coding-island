@@ -8,7 +8,7 @@ have the ability to easily read financial news and create mock portfolios in ord
 point for anything finance related and will prioritize usability
 
 Users:
-Students interested in finance, Finance Gurus
+Students interested in finance and budget management, Finance Gurus, Average Joe
 
 Usability goals:
 Easy to learn (Can be measured by how long it takes for users to use all features)
@@ -21,6 +21,13 @@ Wealth Bud v0.0
 
 User stories:
 As a user i want to be able to be able to log in
-As a user i want to be able to put my income details on there
+As a user i want to be able to log my budget and transactions.
 As a user i want to be able to see automatically generated news
 
+
+Devtasks:
+Create Loginpage
+Create Dashboard for storing budget and transactions and news
+
+
+Tech Stack:
