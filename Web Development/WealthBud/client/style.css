@@ -5,12 +5,35 @@
 }
 /* Hero section */
 .hero {
-
-    padding: 20rem;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    flex-direction: column;
+    height:40rem;
+    padding: 10rem;
     background-color: aqua;
 
 }
 
 .hero h1 {
+    margin-left: 5rem;
     color: white;
+    font-size: 10rem;
+}
+
+.hero p {
+    margin-left: 10rem;
+    font-size: 2rem;
+    display: flex;
+    
+    color: white;
+
+}
+
+.hero button {
+    width: 200px;
+    padding: 30px;
+    margin-top: 5rem;
+    margin-left: 18rem;
+    color: black;
 }
