@@ -3,6 +3,29 @@ const rounds=5;
 playerScore=0;
 computerScore=0;
 
+function printResult(resultText){
+    result=document.querySelector("#result");
+
+    if(playerScore==5){
+        result.textContent="You win the game! Final Score: " + playerScore + " Computer Score: " + computerScore;
+        for (let i = 0; i < 100000000000; i++) {
+        }
+        location.reload();
+        
+    }
+    else if(computerScore==5){
+        result.textContent="You lose the game! Final Score: " + playerScore + " Computer Score: " + computerScore;
+        for (let i = 0; i < 100000000000; i++) {
+        }
+        location.reload();
+    }
+    else{
+        result.textContent=resultText+"\n" +
+        "Your Score: " + playerScore + " Computer Score: " + computerScore;
+    }
+
+    
+}
 function playRound(userChoice, computerChoice) {
     if (userChoice==computerChoice){
         return "It's a tie! You both chose " + userChoice + ".";
@@ -13,7 +36,7 @@ function playRound(userChoice, computerChoice) {
     }
     else if(userChoice=="paper"&&computerChoice=="rock"){
         playerScore++;
-        return "you win! Rock beats scissors";
+        return "you win! paper beats rock";
     }
     else if(userChoice=="scissors"&&computerChoice=="paper"){
         playerScore++;
@@ -24,6 +47,9 @@ function playRound(userChoice, computerChoice) {
         return "you lose! " + computerChoice + " beats " + userChoice + ".";
     }
 }
+
+
+
 
 function getHumanChoice(){
     return prompt("Enter your choice (rock, paper, scissors): (Enter 'exit' to quit)");
@@ -50,18 +76,24 @@ function playGame(rounds){
             }
             const computerChoice=getComputerChoice();
 
-            console.log(playRound(humanChoice, computerChoice));
+            printResult(playRound(humanChoice, computerChoice));
             i--;
         }
         goodByeText();
 }
 
 
-function sumOfTripledEvens(){
-    
-}
 
 
 
-playGame(rounds);
+//Main game loop
+const buttons=document.querySelectorAll("button");
+buttons.forEach(button => {
+    button.addEventListener("click", () => {
+        const userChoice = button.textContent;
+        const computerChoice = getComputerChoice();
+        printResult(playRound(userChoice, computerChoice));
+    });
+});
+// playGame(rounds);
 // console.log("Game over! Thanks for playing.");
