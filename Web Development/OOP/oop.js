@@ -1,0 +1,1 @@
+myObject={name:"Daniel", age: 30, city: "New York"};
