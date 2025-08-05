@@ -134,6 +134,15 @@ function handleOperator(button) {
         clearScreen = true; // Set flag to clear display on next number input
         return
     }
+    else if(firstNumber && !secondNumber) {
+        secondNumber = parseFloat(DISPLAY.textContent);
+        total = operate(firstNumber, secondNumber, operator);
+        console.log(`Second number set to: ${secondNumber}, Total: ${total}`);
+        display(total);
+        firstNumber = total; // Update firstNumber for the next operation
+        clearScreen = true; // Set flag to clear display on next number input
+        return
+    }
     else{
         // If an operator was already pressed, we can just update the operator
         operator = button.textContent;
