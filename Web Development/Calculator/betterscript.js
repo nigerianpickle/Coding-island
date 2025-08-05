@@ -15,16 +15,15 @@ const operatorButtons = calculatorButtons.querySelector('.operators');
 const numbers = numberButtons.querySelectorAll('button');
 const operators = operatorButtons.querySelectorAll('button');
 
-let firstNumber = DEFAULT
-let secondNumber = DEFAULT;
+let firstNumber = null
+let secondNumber = null;
+let total=null;
 let currentNumber = 0;
 let operator = DEFAULT;
-let total=0;
+let clearScreen=false;
 
 
-let operatorPressed = false;
-let firstValSet=false;
-let secondValSet=false;
+
 
 
 
@@ -36,10 +35,10 @@ function multiply(firstNumber, secondNumber) {
 }
 
 function updateDisplay(button){
-    if(firstValSet && operatorPressed== false) {
+    if(clearScreen) {
         //reset the display if an operator was pressed
         DISPLAY.textContent = DEFAULT;
-        operatorPressed = true;
+        clearScreen = false;
     }
 
     currentValue = DISPLAY.textContent;
@@ -102,15 +101,6 @@ function getValue(button){
     
 }
 
-function setOperator(button) {
-    if (operatorPressed) {
-        // If an operator was already pressed, we can just update the operator
-
-        return;
-    }
-    // If no operator was pressed yet, we set the first number and the operator
-    if (firstNumber === DEFAULT) {}
-}
 
 
 function showNumber(button) {
@@ -128,28 +118,33 @@ function showNumber(button) {
 
 function handleOperator(button) {
     
-    if(!firstValSet){
-        firstNumber = currentNumber;
-        firstValSet = true;
+    if(!firstNumber){
+        firstNumber=parseFloat(DISPLAY.textContent);
         operator = button.textContent;
-
+        clearScreen = true; // Set flag to clear display on next number input
+        console.log(`First number set to: ${firstNumber}, Operator: ${operator}`);
         return;
     }
-    else if(!secondValSet){
-        secondNumber= currentNumber;
-        secondValSet = true;
+    else if(firstNumber && !secondNumber) {
+        secondNumber = parseFloat(DISPLAY.textContent);
         total = operate(firstNumber, secondNumber, operator);
-        operatorPressed=true;
+        console.log(`Second number set to: ${secondNumber}, Total: ${total}`);
         display(total);
-        firstNumber = total; // Update firstNumber with the result of the last operation
+        firstNumber = total; // Update firstNumber for the next operation
+        clearScreen = true; // Set flag to clear display on next number input
+        return
     }
-    else if(firstValSet && secondValSet) {
-        // If both first and second values are set, we can perform the operation
-        operator = button.textContent; // Set new operator
-        DISPLAY.textContent = operate(firstNumber,secondNumber,operator); // Display the result of the last operation
-        operatorPressed=false; // Reset operatorPressed for the next operation
-        // display(total);
+    else{
+        // If an operator was already pressed, we can just update the operator
+        operator = button.textContent;
+        total = operate(firstNumber, secondNumber, operator);
+        console.log(`Total now: ${total}`);
+        display(total);
+        firstNumber = total; // Update firstNumber for the next operation
+        clearScreen = true; // Set flag to clear display on next number input
+        return;
     }
+    
 
 
 }
