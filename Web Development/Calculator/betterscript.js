@@ -171,6 +171,9 @@ operators.forEach(operator=>
         {operator.addEventListener("click",()=>{
         if(operator.textContent === 'clear') {
             clearDisplay();
+            firstNumber = null;
+            secondNumber = null;
+            total = null;
             return;
         }
             handleOperator(operator);})

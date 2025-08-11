@@ -1,13 +1,81 @@
-const ANIMALS=["🦊","🐇"]; 
+const ANIMALS=["Fox","Rabbit"]; 
 const FOREST=document.querySelector(".forest");
 
 //By default, the first animal is selected
 let selectedAnimal=ANIMALS[0];
 
 
-function addAnimal(){
+class Forest{
+    constructor(){
+        this.animals=[];
+    }
 
+    addAnimal(type,x,y){
+        //Fox
+        switch(type){
+            case selectedAnimal="Fox":
+             const fox=new Fox();
+             fox.setPosition(x,y);
+             this.animals.push(fox);
+             return fox;
+            case selectedAnimal="Rabbit":
+             const rabbit=new Rabbit();
+             rabbit.setPosition(x,y);
+             this.animals.push(rabbit);
+             return rabbit;
+
+
+        }
+
+    }
 }
+
+
+class Animal{
+    constructor(name){
+        this.name=name;
+        this.x=0;
+        this.y=0;
+    }
+    
+    get name(){
+        return this.name;
+    }
+
+     setPosition(x,y){
+        this.x=x;
+        this.y=y;
+    }
+
+    setX(x){
+        this.x=x;
+    }
+    
+    setY(y){
+        this.y=y;
+    }
+}
+
+class Fox extends Animal{
+    constructor(){
+        super("Fox");
+    }
+
+    get type(){
+        return this.name;
+    }
+}
+
+class Rabbit extends Animal{
+    constructor(){
+        super("Rabbit");
+    }
+
+    get type(){
+        return this.name;
+    }
+}
+
 
 
 
@@ -46,4 +114,8 @@ function  addAnimal(event){
 
 
 
-
+//Testing the classes
+const fox=new Fox();
+const rabbit=new Rabbit();
+console.log(fox.type); // "Fox"
+console.log(rabbit.type); // "Rabbit"
