@@ -11,29 +11,32 @@ class Forest{
     }
 
     addAnimal(type,x,y){
+        let animal;
         //Fox
-        switch(type){
-            case selectedAnimal="Fox":
-             const fox=new Fox();
-             fox.setPosition(x,y);
-             this.animals.push(fox);
-             return fox;
-            case selectedAnimal="Rabbit":
-             const rabbit=new Rabbit();
-             rabbit.setPosition(x,y);
-             this.animals.push(rabbit);
-             return rabbit;
 
+            if (selectedAnimal=="Fox"){
+                animal=new Fox();
+            } else if (selectedAnimal=="Rabbit"){
+                animal=new Rabbit();
+            }else{
+                console.error("Unknown animal type: " + selectedAnimal);
+                return null;
+            }
 
-        }
-
+             this.animals.push(animal);
+             animal.setPosition(x,y);
+             return animal;
     }
+
+
+    
 }
 
 
 class Animal{
     constructor(name){
         this.name=name;
+        this.sprite=null; //This will hold the HTML element representing the animal
         this.x=0;
         this.y=0;
     }
@@ -41,7 +44,9 @@ class Animal{
     get name(){
         return this.name;
     }
+    
 
+    //Sets the position of the animal in the forest
      setPosition(x,y){
         this.x=x;
         this.y=y;
@@ -54,6 +59,8 @@ class Animal{
     setY(y){
         this.y=y;
     }
+
+    
 }
 
 class Fox extends Animal{
