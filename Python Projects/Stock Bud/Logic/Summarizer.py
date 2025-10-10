@@ -23,6 +23,8 @@ class NewsInsights:
         else:
             self.client = None
 
+
+        #Removed because it was causing a large model to be installed 
         self.summarizer = pipeline(
             "summarization", model=summary_model, tokenizer=summary_model, device="cpu"
         )

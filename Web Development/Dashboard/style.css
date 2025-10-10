@@ -1,0 +1,62 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+.container{
+    display: grid;
+    height: 100vh;
+    width: 100vw;
+    grid: 100% / 25% 75%;
+}
+
+.side-bar{
+    background-color: skyblue;
+    display: grid;
+    grid-template-rows: 10% 45% 45% ;
+}  
+
+.dashboard-header{
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    display: inline-flex;
+    margin-top: 5%;
+    margin-left: 5%;
+    height: 100px;
+    background-color: blueviolet;
+    
+}
+
+.dashboard-header .mdi{
+    font-size: 35px;
+}
+
+.dashboard-header h1{
+    margin-left: 10px;
+}   
+
+
+.dashboard-options{
+    display: grid;
+    grid:50% 50% / 100%;
+    background-color: grey;
+    /* gap: 50px; */
+}
+
+.dashboard-options .upper{
+    background-color: black;
+}
+
+.dashboard-options .lower{
+    background-color: white;
+}
+
+
+.main-page{
+    background-color: rgb(240, 240, 240);
+}
+
+
+
