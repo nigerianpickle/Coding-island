@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RoomieQuest 🧹</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <nav class="navbar">
+    <h1>🏠 RoomieQuest</h1>
+    <div class="coins">💰 <span id="coins">0</span></div>
+  </nav>
+
+  <main class="container">
+    <section class="profile">
+      <img src="assets/avatar.png" alt="avatar" class="avatar" />
+      <div class="xp-bar"><div class="xp-fill"></div></div>
+      <p class="level">Level 1 • 0 XP</p>
+    </section>
+
+    <div class="tabs">
+      <button class="tab active" id="tasksTab">🧹 Tasks</button>
+      <button class="tab" id="shopTab">🛒 Shopping</button>
+    </div>
+
+    <section class="task-list" id="taskList"></section>
+    <section class="shop-list hidden" id="shopList"></section>
+  </main>
+
+  <footer class="footer">
+    <button class="add-btn">➕ Add Task</button>
+  </footer>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
