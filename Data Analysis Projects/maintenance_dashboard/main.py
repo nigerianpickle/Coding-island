@@ -4,6 +4,8 @@ import random
 from faker import Faker
 from datetime import datetime, timedelta
 import sqlite3
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 # --- 1. Create data folder ---
 os.makedirs("data", exist_ok=True)
@@ -54,3 +56,36 @@ print("\n--- Average Cost and Turnaround by Engine Type ---")
 print(result)
 
 conn.close()
+
+# Load data
+df = pd.read_csv("data/maintenance_jobs.csv")
+df["completed_date"] = pd.to_datetime(df["completed_date"])
+
+# --- 1. Trend: Total monthly maintenance cost ---
+df["month"] = df["completed_date"].dt.to_period("M")
+monthly_cost = df.groupby("month")["cost_usd"].sum().reset_index()
+
+plt.figure(figsize=(8,4))
+monthly_cost["month"] = monthly_cost["month"].astype(str)
+sns.lineplot(data=monthly_cost, x="month", y="cost_usd", marker="o")
+plt.title("Monthly Maintenance Cost Trend")
+plt.ylabel("Total Cost (USD)")
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.savefig("monthly_trend.png")
+plt.show()
+
+# --- 2. Avg turnaround by engine type ---
+plt.figure(figsize=(6,4))
+sns.barplot(data=df, x="engine_type", y="turnaround_days", estimator="mean", ci=None)
+plt.title("Average Turnaround Days by Engine Type")
+plt.ylabel("Days")
+plt.tight_layout()
+plt.savefig("turnaround_engine.png")
+plt.show()
+
+# --- 3. Cost vs Turnaround scatter ---
+sns.scatterplot(data=df, x="turnaround_days", y="cost_usd", hue="engine_type")
+plt.title("Cost vs Turnaround Time")
+plt.savefig("scatter_cost_turnaround.png")
+plt.show()
