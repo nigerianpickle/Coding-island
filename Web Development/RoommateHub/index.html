@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🏡 RoomMate Hub</title>
+  <link rel="stylesheet" href="style/style.css">
+</head>
+<body>
+  <header>
+    <h1>🏡 RoomMate Hub</h1>
+    <nav>
+      <button id="tabTasks" class="active">🧹 Tasks</button>
+      <button id="tabShopping">🛒 Shopping</button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- TASKS SECTION -->
+    <section id="tasksSection" class="tab active">
+      <h2>Chores</h2>
+      <div class="add-box">
+        <input type="text" id="taskInput" placeholder="Add a new task...">
+        <label><input type="checkbox" id="isShoppingLink"> Link to Shopping</label>
+        <button id="addTaskBtn">Add Task</button>
+      </div>
+      <ul id="taskList"></ul>
+    </section>
+
+    <!-- SHOPPING SECTION -->
+    <section id="shoppingSection" class="tab">
+      <h2>Shopping List</h2>
+      <div class="add-box">
+        <input type="text" id="itemInput" placeholder="Add new item...">
+        <button id="addItemBtn">Add Item</button>
+      </div>
+      <ul id="shoppingList"></ul>
+    </section>
+
+    <!-- LEADERBOARD -->
+    <section id="leaderboard">
+      <h2>🏆 Leaderboard</h2>
+      <ul id="leaderboardList"></ul>
+    </section>
+  </main>
+
+  <script type="module" src="./scripts/app.js"></script>
+</body>
+</html>
