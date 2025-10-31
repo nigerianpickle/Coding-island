@@ -129,8 +129,16 @@ while True:
 
         # --- Draw ---
         # Poops
+        # for rect, _ in poops:
+        #     pygame.draw.circle(screen, GREEN, rect.center, 5)
+        # Poops (💩 emojis instead of green circles)
+        # 💩 Emoji Poop Projectiles
+        poop_font = pygame.font.SysFont("Segoe UI Emoji", 10)
+
         for rect, _ in poops:
-            pygame.draw.circle(screen, GREEN, rect.center, 5)
+            poop_surface = poop_font.render("💩", True, (255, 255, 255))
+            poop_rect = poop_surface.get_rect(center=rect.center)
+            screen.blit(poop_surface, poop_rect)
 
         # Goose
         # --- Animate Goose ---
