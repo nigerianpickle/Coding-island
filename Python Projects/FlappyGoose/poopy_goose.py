@@ -46,7 +46,7 @@ clock = pygame.time.Clock()
 font = pygame.font.Font(None, 40)
 
 # --- Goose Sprite Setup ---
-sprite_sheet = pygame.image.load("gooseImg.png").convert_alpha()
+goose_sheet = pygame.image.load("gooseImg.png").convert_alpha()
 
 
 # --- Student Sprite Setup ---
@@ -76,16 +76,16 @@ bg_speed = 2       # how fast it scrolls
 
 # Adjust these numbers to match your sprite’s width and height
 FRAME_WIDTH = 202    # ← change if needed; divide total sheet width by 3
-FRAME_HEIGHT = sprite_sheet.get_height()
+FRAME_HEIGHT = goose_sheet.get_height()
 
 frames = []
-for i in range(3):  # 3 frames
-    frame = sprite_sheet.subsurface((i * FRAME_WIDTH, 0, FRAME_WIDTH, FRAME_HEIGHT))
+for i in range(3):  # 2 frames
+    frame = goose_sheet.subsurface((i * FRAME_WIDTH, 0, FRAME_WIDTH, FRAME_HEIGHT))
     frame = pygame.transform.scale(frame, (80, 60))  # upscale for visibility
     frames.append(frame)
 
 current_frame = 0
-frame_delay = 7
+frame_delay = 20
 frame_timer = 0
 
 
@@ -113,6 +113,7 @@ while True:
                 score = 0
                 npcs.clear()
                 poops.clear()
+                ghosts.clear()
                 game_active = True
 
     if game_active:
@@ -130,8 +131,6 @@ while True:
                 game_active = False
 
         # --- Background ---
-        # screen.fill(PURPLE)
-        # pygame.draw.circle(screen, ORANGE, (320, 100), 40)
 
 
         # --- Scrolling Background ---
@@ -231,9 +230,7 @@ while True:
 
         # --- Draw ---
         # Poops
-        # for rect, _ in poops:
-        #     pygame.draw.circle(screen, GREEN, rect.center, 5)
-        # Poops (💩 emojis instead of green circles)
+
         # 💩 Emoji Poop Projectiles
         poop_font = pygame.font.SysFont("Segoe UI Emoji", 20)
 
@@ -251,11 +248,6 @@ while True:
 
         rotated_goose = pygame.transform.rotate(frames[current_frame], -velocity * 2)
         screen.blit(rotated_goose, goose)
-
-
-        # NPCs
-        # for npc in npcs:
-        #     pygame.draw.rect(screen, 0, npc["rect"]) 
 
         # Ground
         pygame.draw.rect(screen, BLACK, (0, ground_y, WIDTH, ground_height))
