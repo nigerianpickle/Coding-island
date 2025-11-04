@@ -54,13 +54,13 @@ frame_delay = 20
 
 background_files = [
     "bg_river.png",
-    "bg_plain2.png",
-    "bg_river.png",
-    "bg_castle.png",
     "bg_plain.png",
+    "bg_crazy.png",
+    "bg_dim3.png",
+    "bg_fallingmoon.png",
     "bg_river.png",
-    "bg_plain2.png",
-    "bg_plain2.png",
+    "bg_plain.png",
+    "bg_plain.png",
     "bg_lighthouse.png",
 ]
 
