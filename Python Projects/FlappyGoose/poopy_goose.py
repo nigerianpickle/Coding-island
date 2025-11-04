@@ -53,10 +53,15 @@ frame_delay = 20
 # bg_speed = 2
 
 background_files = [
-    "bg_campus.png",
     "bg_river.png",
+    "bg_plain2.png",
     "bg_river.png",
-    "bg_plain.png"
+    "bg_castle.png",
+    "bg_plain.png",
+    "bg_river.png",
+    "bg_plain2.png",
+    "bg_plain2.png",
+    "bg_lighthouse.png",
 ]
 
 backgrounds = [pygame.transform.scale(pygame.image.load(path).convert(), (WIDTH, HEIGHT))
