@@ -112,6 +112,7 @@ while True:
                 velocity = 0
                 score = 0
                 npcs.clear()
+                ghosts.clear()
                 poops.clear()
                 game_active = True
 
