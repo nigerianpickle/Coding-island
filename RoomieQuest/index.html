@@ -15,10 +15,25 @@
     <button id="login">Log In</button>
   </div>
 
-  <div id="dashboard" style="display:none;">
-    <p id="welcome"></p>
-    <button id="logout">Logout</button>
+<div id="dashboard" style="display:none;">
+  <p id="welcome"></p>
+
+  <div id="room-section">
+    <h3>Your Rooms</h3>
+    <ul id="room-list"></ul>
+
+    <h3>Create Room</h3>
+    <input id="room-password" type="text" placeholder="Enter room password" />
+    <button id="create-room">Create</button>
+
+    <h3>Join Room</h3>
+    <input id="join-room-id" type="text" placeholder="Room ID" />
+    <input id="join-room-password" type="text" placeholder="Password" />
+    <button id="join-room">Join</button>
   </div>
+
+  <button id="logout">Logout</button>
+</div>
 
   <!-- Supabase CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
