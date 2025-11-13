@@ -76,6 +76,7 @@ async function showDashboard() {
   authView.style.display = 'none';
   dashboard.style.display = 'block';
   welcome.textContent = `Welcome, ${user.email}!`;
+  loadRooms();
 }
 
 function showAuth() {
@@ -86,6 +87,8 @@ function showAuth() {
 // --- Room functions ---
 async function loadRooms() {
   const { data: { user } } = await supabase.auth.getUser();
+  console.log('Loading rooms for user:', user);
+  console.log('User ID:', user.id);
 
   // get all memberships for the current user
   
@@ -118,8 +121,10 @@ async function loadRooms() {
 }
 
 document.getElementById('create-room').onclick = async () => {
+  console.log('Create room button clicked');
   const password = document.getElementById('room-password').value;
   const { data: { user } } = await supabase.auth.getUser();
+  console.log('Creating room for user:', user);
 
   // create new room
   const { data: room, error } = await supabase
