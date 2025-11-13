@@ -16,26 +16,53 @@ document.getElementById('signup').onclick = async () => {
 // Try logging in
 const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
-if (error && error.message.includes('Invalid login credentials')) {
-  // Email not registered yet → sign them up
-  const { error: signupError } = await supabase.auth.signUp({ email, password });
-  if (signupError) alert(signupError.message);
-  else alert('Check your email to confirm signup!');
-} else {
-  alert('Account already exists! ');
-}
+  if (error && error.message.includes('Invalid login credentials')) {
+    // Email not registered yet → sign them up
+    const { data: signUpData, error: signupError } = await supabase.auth.signUp({ email, password });
+    if (signupError) return alert(signupError.message);
+
+    // After successful signup, insert user into USERS table
+    const user = signUpData.user;
+    if (user) {
+      await supabase.from('USERS').insert({
+        user_id: user.id,
+        user_name: email.split('@')[0] // basic username
+      });
+    }
+
+    alert('Check your email to confirm signup!');
+  } else {
+    alert('Account already exists!');
+  }
+};
   
 
-};
 
 document.getElementById('login').onclick = async () => {
   const email = document.getElementById('email').value;
   const password = document.getElementById('password').value;
+
   const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-  
-  if (error) alert(error.message);
-  else showDashboard();
+  if (error) return alert(error.message);
+
+  // ensure USERS row exists
+  const { data: { user } } = await supabase.auth.getUser();
+  const { data: existing } = await supabase
+    .from('USERS')
+    .select('user_id')
+    .eq('user_id', user.id)
+    .maybeSingle();
+
+  if (!existing) {
+    await supabase.from('USERS').insert({
+      user_id: user.id,
+      user_name: email.split('@')[0]
+    });
+  }
+
+  showDashboard();
 };
+
 
 document.getElementById('logout').onclick = async () => {
   await supabase.auth.signOut();
@@ -61,6 +88,7 @@ async function loadRooms() {
   const { data: { user } } = await supabase.auth.getUser();
 
   // get all memberships for the current user
+  
   const { data: memberships, error } = await supabase
     .from('MEMBERSHIP')
     .select('room_id')
@@ -103,10 +131,17 @@ document.getElementById('create-room').onclick = async () => {
   if (error) return alert(error.message);
 
   // link the user to the room
-  await supabase
+    const { data: membership, error: membershipError } = await supabase
     .from('MEMBERSHIP')
-    .insert({ user_id: user.id, room_id: room.room_id });
+    .insert({ user_id: user.id, room_id: room.room_id })
+    .select()
+    .single();
 
+    if (membershipError) {
+    console.error('Membership insert error:', membershipError);
+    alert('Membership failed: ' + membershipError.message);
+    return;
+    }
   alert('Room created!');
   loadRooms();
 };
