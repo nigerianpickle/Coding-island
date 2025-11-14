@@ -76,6 +76,7 @@ async function showDashboard() {
   authView.style.display = 'none';
   dashboard.style.display = 'block';
   welcome.textContent = `Welcome, ${user.email}!`;
+  loadRooms();
 }
 
 function showAuth() {
