@@ -3,37 +3,79 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>RoomieQuest V0</title>
+  <title>RoomieQuest</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f9fafb;
+      color: #111827;
+    }
+  </style>
 </head>
-<body>
-  <h1>🏠 RoomieQuest</h1>
+<body class="min-h-screen flex flex-col items-center justify-center">
 
-  <div id="auth-view">
-    <input id="email" type="email" placeholder="Email" />
-    <input id="password" type="password" placeholder="Password" />
-    <button id="signup">Sign Up</button>
-    <button id="login">Log In</button>
+  <!-- ---------- AUTH VIEW ---------- -->
+  <div id="auth-view" class="w-full max-w-sm bg-white border border-gray-200 rounded-xl p-8 shadow-sm">
+    <h1 class="text-3xl font-semibold text-center mb-2">🏠 RoomieQuest</h1>
+    <p class="text-gray-500 text-center mb-8">Live smarter together.</p>
+
+    <input id="email" type="email" placeholder="Email"
+      class="w-full mb-3 px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition" />
+    <input id="password" type="password" placeholder="Password"
+      class="w-full mb-6 px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition" />
+
+    <div class="flex justify-between">
+      <button id="signup"
+        class="w-[48%] bg-indigo-600 text-white py-2.5 rounded-lg hover:bg-indigo-700 transition">Sign Up</button>
+      <button id="login"
+        class="w-[48%] bg-gray-100 text-gray-800 py-2.5 rounded-lg hover:bg-gray-200 transition">Log In</button>
+    </div>
   </div>
 
-<div id="dashboard" style="display:none;">
-  <p id="welcome"></p>
+  <!-- ---------- DASHBOARD VIEW ---------- -->
+  <div id="dashboard" class="hidden w-full max-w-4xl bg-white border border-gray-200 rounded-xl shadow-sm p-10 mt-6">
+    <div class="flex justify-between items-center mb-8">
+      <h2 id="welcome" class="text-2xl font-semibold"></h2>
+      <button id="logout"
+        class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition">Logout</button>
+    </div>
 
-  <div id="room-section">
-    <h3>Your Rooms</h3>
-    <ul id="room-list"></ul>
+    <div class="grid md:grid-cols-2 gap-10">
+      <!-- ROOMS -->
+      <div>
+        <h3 class="text-lg font-semibold mb-3">Your Rooms</h3>
+        <ul id="room-list" class="space-y-3 text-sm text-gray-700 bg-gray-50 p-4 rounded-lg border border-gray-100">
+          <li class="text-gray-500">No rooms yet.</li>
+        </ul>
+      </div>
 
-    <h3>Create Room</h3>
-    <input id="room-password" type="text" placeholder="Enter room password" />
-    <button id="create-room">Create</button>
+      <!-- ACTIONS -->
+      <div class="space-y-6">
+        <!-- CREATE ROOM -->
+        <div>
+          <h3 class="text-lg font-semibold mb-2">Create Room</h3>
+          <div class="flex gap-2">
+            <input id="room-password" type="text" placeholder="Room password"
+              class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition" />
+            <button id="create-room"
+              class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition">Create</button>
+          </div>
+        </div>
 
-    <h3>Join Room</h3>
-    <input id="join-room-id" type="text" placeholder="Room ID" />
-    <input id="join-room-password" type="text" placeholder="Password" />
-    <button id="join-room">Join</button>
+        <!-- JOIN ROOM -->
+        <div>
+          <h3 class="text-lg font-semibold mb-2">Join Room</h3>
+          <input id="join-room-id" type="text" placeholder="Room ID"
+            class="w-full mb-2 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition" />
+          <input id="join-room-password" type="text" placeholder="Password"
+            class="w-full mb-3 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition" />
+          <button id="join-room"
+            class="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition">Join</button>
+        </div>
+      </div>
+    </div>
   </div>
-
-  <button id="logout">Logout</button>
-</div>
 
   <!-- Supabase CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
