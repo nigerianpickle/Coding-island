@@ -66,6 +66,7 @@ document.getElementById('login').onclick = async () => {
 
 document.getElementById('logout').onclick = async () => {
   await supabase.auth.signOut();
+  document.getElementById('room-list').innerHTML = '<li>No rooms toshow </li>';
   showAuth();
 };
 
