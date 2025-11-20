@@ -32,7 +32,8 @@ const { data, error } = await supabase.auth.signInWithPassword({ email, password
 
     alert('Check your email to confirm signup!');
   } else {
-    alert('Account already exists!');
+    alert('Account already exists!'); 
+    //HElllo
   }
 };
   
