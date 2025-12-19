@@ -1,0 +1,25 @@
+12/19/25
+Today i decided to become a better developer(Part of journey to become better person)
+Anyways, i was stuck on a bug for a bit and i kept getting 
+supabase.js:20 TypeError: Failed to fetch
+    at qt (supabase.js:20:2872)
+    at supabase.js:20:8913
+    at sr (supabase.js:20:8655)
+    at Fr.signInWithPassword (supabase.js:22:18936)
+    at document.getElementById.onclick (app.js:46:47)
+(anonymous)	@	supabase.js:20
+await in (anonymous)		
+sr	@	supabase.js:20
+signInWithPassword	@	supabase.js:22
+document.getElementById.onclick	@	app.js:46
+
+
+On investigating,
+  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+  if (error) return alert(error.message);
+
+
+  i see the error is coming from here.
+
+Then i remembered supabase took my table down :|
+﻿
