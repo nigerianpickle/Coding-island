@@ -116,7 +116,9 @@ async function loadRooms() {
   list.innerHTML = rooms.map(r => `
     <li>
       Room ID: ${r.room_id}<br/>
-      Password: ${r.password}
+      Password: ${r.password}<br>
+      <a href="" style="color: blue; text-decoration: underline;">Enter Room</a>
+      
     </li>`).join('');
 }
 
