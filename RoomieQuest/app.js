@@ -32,7 +32,8 @@ const { data, error } = await supabase.auth.signInWithPassword({ email, password
 
     alert('Check your email to confirm signup!');
   } else {
-    alert('Account already exists!');
+    alert('Account already exists!'); 
+    //HElllo
   }
 };
   
@@ -66,6 +67,7 @@ document.getElementById('login').onclick = async () => {
 
 document.getElementById('logout').onclick = async () => {
   await supabase.auth.signOut();
+  document.getElementById('room-list').innerHTML = '<li>No rooms toshow </li>';
   showAuth();
 };
 
