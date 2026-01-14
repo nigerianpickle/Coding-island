@@ -89,6 +89,8 @@ function showAuth() {
 // --- Room functions ---
 async function loadRooms() {
   const { data: { user } } = await supabase.auth.getUser();
+  console.log('Loading rooms for user:', user);
+  console.log('User ID:', user.id);
 
   // get all memberships for the current user
   
@@ -113,16 +115,32 @@ async function loadRooms() {
     .in('room_id', roomIds);
 
   const list = document.getElementById('room-list');
+  // list.innerHTML = rooms.map(r => `
+  //   <li>
+  //     Room ID: ${r.room_id}<br/>
+  //     Password: ${r.password}<br>
+  //     <a href="" style="color: blue; text-decoration: underline;">Enter Room</a>
+      
+  //   </li>`).join('');
   list.innerHTML = rooms.map(r => `
-    <li>
-      Room ID: ${r.room_id}<br/>
-      Password: ${r.password}
-    </li>`).join('');
+  <li>
+    <strong>Room ${r.room_id}</strong><br/>
+    <a 
+      href="#"
+      class="enter-room"
+      data-room-id="${r.room_id}"
+    >
+      Enter Room
+    </a>
+  </li>
+`).join('');
 }
 
 document.getElementById('create-room').onclick = async () => {
+  console.log('Create room button clicked');
   const password = document.getElementById('room-password').value;
   const { data: { user } } = await supabase.auth.getUser();
+  console.log('Creating room for user:', user);
 
   // create new room
   const { data: room, error } = await supabase
@@ -172,6 +190,24 @@ document.getElementById('join-room').onclick = async () => {
   alert('Joined room!');
   loadRooms();
 };
+
+document.getElementById('room-list').addEventListener('click', (e) => {
+  if (!e.target.classList.contains('enter-room')) return;
+
+  e.preventDefault();
+
+  const roomId = e.target.dataset.roomId;
+  console.log('Entering room:', roomId);
+
+  enterRoom(roomId);
+});
+
+
+function enterRoom(roomId) {
+  dashboard.style.display = 'none';
+  document.getElementById('room-view').style.display = 'block';
+  loadRoomData(roomId);
+}
 
 
 // --- Load initial state ---
