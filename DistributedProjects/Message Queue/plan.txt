@@ -1,0 +1,66 @@
+thin client 
+- adds jobs to system
+- can check up on status of jobs
+Job submission
+
+JOB some text of any length\n
+
+Client can check status
+STATUS 1
+
+
+
+Message queue 
+- Job queue/job broker
+- Accepts new jobs and issues jobs to workers
+
+client ---JOB message--> server
+return
+client <--numeric job id-- server
+
+
+- Worker does work that takes long time to complete
+
+
+Job state
+-waiting 
+-running
+-completed
+
+
+
+workers fetch jobs from work queue and do the work.
+
+MVP complete
+Sever accepts connection from multiple clients
+
+clients can bring up multiple connection
+
+v2-state(complete)
+server that stores 
+Workers that pull from server
+clients thwat push job to server
+
+requirements
+Server stores state of job object
+
+Job object
+-waiting : No issued to a Worker
+-running: Job has been issued to a worker
+-Completed  worker has informed the work queue te job is done
+
+
+
+v3 (complete)
+client can request status of Job
+worker prints to terminal
+worker prints to UDP sockets
+worker informs server job sis complete
+-verify all states being handled well
+
+
+v4(done)
+command line arguments
+edit and refactoring
+test on aviary
+if no port specified it should use the deafult
