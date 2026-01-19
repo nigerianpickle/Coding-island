@@ -23,3 +23,58 @@ On investigating,
 
 Then i remembered supabase took my table down :|
 ﻿
+
+
+
+Dev Log Entry — Room View Exit Button Issue
+
+Date: 2026-01-18
+Feature: Room View / Exit Button
+Problem: Clicking the “Exit Room” button did nothing.
+
+Investigation:
+
+Initially, the button had an inline HTML handler:
+
+<button id="exit-room" onclick="exitRoom()">Exit</button>
+
+
+The exitRoom() function existed in app.js:
+
+function exitRoom() {
+  dashboard.style.display = 'block';
+  document.getElementById('room-view').style.display = 'none';
+}
+
+
+However, the script was loaded as a module:
+
+<script type="module" src="./app.js"></script>
+
+
+In ES modules, functions are scoped to the module, meaning they do not automatically attach to window.
+
+HTML inline handlers (onclick="exitRoom()") look for the function on the global window object. Since it wasn’t there, the function was never called.
+
+Solution:
+
+Use addEventListener in the module to connect the button to the function:
+
+document.getElementById('exit-room').addEventListener('click', exitRoom);
+
+
+This works because the event listener is registered directly on the DOM element and runs the function inside the module scope.
+
+Lesson Learned:
+
+Modules are isolated: JS functions in type="module" scripts are not global.
+
+Inline HTML handlers don’t work in modules.
+
+Best practice: Always use addEventListener when writing modular JS.
+
+Next Steps:
+
+Ensure all interactive buttons (like “Enter Room”, “Join Room”) use event listeners.
+
+Consider creating a small helper to attach all module functions to DOM elements consistently.

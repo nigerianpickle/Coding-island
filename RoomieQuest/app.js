@@ -6,6 +6,8 @@ const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const authView = document.getElementById('auth-view');
 const dashboard = document.getElementById('dashboard');
 const welcome = document.getElementById('welcome');
+let activeRoomId = null;
+
 
 
 // --- Auth actions ---
@@ -202,11 +204,50 @@ document.getElementById('room-list').addEventListener('click', (e) => {
   enterRoom(roomId);
 });
 
+async function loadRoomData() {
+  if (!activeRoomId) {
+    console.error('No active room set');
+    return;
+  }
+
+  console.log('Loading data for room:', activeRoomId);
+
+  // Fetch room info
+  const { data: room, error } = await supabase
+    .from('ROOMS')
+    .select('*')
+    .eq('room_id', activeRoomId)
+    .single();
+
+  if (error) {
+    console.error('Failed to load room:', error);
+    return;
+  }
+
+  // Render room info
+  document.getElementById('room-title').textContent =
+    `Room ${room.room_id}`;
+}
+
+document.getElementById('exit-room').addEventListener('click', () => {
+  document.getElementById('room-view').classList.add('hidden');
+  dashboard.style.display = 'block';
+  activeRoomId = null;
+});
+
+
+function exitRoom() {
+  document.getElementById('room-view').classList.add('hidden');
+  dashboard.style.display = 'block';
+  activeRoomId = null;
+}
+
 
 function enterRoom(roomId) {
   dashboard.style.display = 'none';
-  document.getElementById('room-view').style.display = 'block';
-  loadRoomData(roomId);
+  activeRoomId = roomId;
+  document.getElementById('room-view').style.display = 'block'; //might make this a function
+  loadRoomData();
 }
 
 
