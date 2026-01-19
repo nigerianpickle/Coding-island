@@ -6,6 +6,7 @@ const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const authView = document.getElementById('auth-view');
 const dashboard = document.getElementById('dashboard');
 const welcome = document.getElementById('welcome');
+const roomView = document.getElementById('room-view');
 let activeRoomId = null;
 
 
@@ -232,15 +233,13 @@ async function loadRoomData() {
 document.getElementById('exit-room').addEventListener('click', () => {
   document.getElementById('room-view').classList.add('hidden');
   dashboard.style.display = 'block';
+  roomView.style.display = 'none';
+  
   activeRoomId = null;
 });
 
 
-function exitRoom() {
-  document.getElementById('room-view').classList.add('hidden');
-  dashboard.style.display = 'block';
-  activeRoomId = null;
-}
+
 
 
 function enterRoom(roomId) {
