@@ -1,0 +1,4 @@
+Available projects:
+- daniels-project/circle-4r41a-l5kcu
+- daniels-project/circle-9po6m-sw919
+- daniels-project/redcircle-bvfxj-y0v3r
