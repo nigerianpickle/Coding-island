@@ -3,7 +3,7 @@ import cv2
 
 rf = Roboflow(api_key="LKMNlvypynSJUmpg6Wf9")
 ws = rf.workspace()
-project = ws.project("circle-4r41a-l5kcu")  # <-- use your exact project ID
+project = ws.project("circle-9po6m-sw919")  # <-- use your exact project ID
 model = project.version(1).model
 
 cap = cv2.VideoCapture(0)  # webcam
