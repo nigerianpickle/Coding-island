@@ -13,10 +13,10 @@
     }
   </style>
 </head>
-<body class="min-h-screen flex flex-col items-center justify-center">
+<body class="min-h-screen flex flex-col items-center ">
 
   <!-- ---------- AUTH VIEW ---------- -->
-  <div id="auth-view" class="w-full max-w-sm bg-white border border-gray-200 rounded-xl p-8 shadow-sm">
+  <div id="auth-view" class="w-full max-w-sm bg-white border border-gray-200 rounded-xl p-8 shadow-sm justify-center">
     <h1 class="text-3xl font-semibold text-center mb-2">🏠 RoomieQuest</h1>
     <p class="text-gray-500 text-center mb-8">Live smarter together.</p>
 
@@ -76,12 +76,44 @@
       </div>
     </div>
   </div>
-`
+
   <!-- ROOM VIEW -->
-   <div id="room-view" style="display:none">
-    <h1 id="room-title"></h1>
-    <ul id="task-list"></ul>
+<div id="room-view" class="hidden w-full max-w-5xl mx-auto p-8">
+  
+  <!-- Header -->
+  <div class="flex justify-between items-center mb-8">
+    <h1 id="room-title" class="text-3xl font-semibold"></h1>
+    <button
+      id="exit-room"
+      class="bg-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300 transition"
+    >
+      ← Back to Dashboard
+    </button>
+
   </div>
+
+  <!-- Content -->
+  <div class="grid md:grid-cols-2 gap-8">
+    
+    <!-- Tasks -->
+    <div class="bg-white rounded-xl p-6 shadow-sm border">
+      <h2 class="text-lg font-semibold mb-4">Tasks</h2>
+      <ul id="task-list" class="space-y-2 text-sm text-gray-700">
+        <li class="text-gray-400">No tasks yet</li>
+      </ul>
+    </div>
+
+    <!-- Shopping List -->
+    <div class="bg-white rounded-xl p-6 shadow-sm border">
+      <h2 class="text-lg font-semibold mb-4">Shopping List</h2>
+      <ul id="shopping-list" class="space-y-2 text-sm text-gray-700">
+        <li class="text-gray-400">No items yet</li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
 
   <!-- Supabase CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
