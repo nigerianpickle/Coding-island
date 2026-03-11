@@ -1,15 +1,20 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../supabaseClient';
 
+const ADJECTIVES = ['Purple', 'Golden', 'Silent', 'Cosmic', 'Lazy', 'Brave', 'Fuzzy', 'Mighty', 'Swift', 'Chill'];
+const NOUNS = ['Penguin', 'Cactus', 'Noodle', 'Rocket', 'Panda', 'Waffle', 'Comet', 'Pickle', 'Sloth', 'Mango'];
+
+function generateRoomName() {
+  const adj = ADJECTIVES[Math.floor(Math.random() * ADJECTIVES.length)];
+  const noun = NOUNS[Math.floor(Math.random() * NOUNS.length)];
+  return `${adj} ${noun}`;
+}
+
 const btnBase = {
   border: 'none', borderRadius: 10, fontSize: 14,
   fontWeight: 600, cursor: 'pointer', fontFamily: 'DM Sans, sans-serif',
   transition: 'transform 0.15s, opacity 0.15s',
 };
-
-
-const ADJECTIVES = ['Purple', 'Golden', 'Silent', 'Cosmic', 'Lazy', 'Brave', 'Fuzzy', 'Mighty', 'Swift', 'Chill'];
-const NOUNS = ['Penguin', 'Cactus', 'Noodle', 'Rocket', 'Panda', 'Waffle', 'Comet', 'Pickle', 'Sloth', 'Mango'];
 
 export default function Dashboard({ user, onEnterRoom }) {
   const [rooms, setRooms] = useState([]);
@@ -19,15 +24,6 @@ export default function Dashboard({ user, onEnterRoom }) {
 
   useEffect(() => { loadRooms(); }, []);
 
-
-
-  function generateRoomName() {
-  const adj = ADJECTIVES[Math.floor(Math.random() * ADJECTIVES.length)];
-  const noun = NOUNS[Math.floor(Math.random() * NOUNS.length)];
-  return `${adj} ${noun}`;
-  }
-
-  
   async function loadRooms() {
     const { data: memberships, error } = await supabase
       .from('MEMBERSHIP').select('room_id').eq('user_id', user.id);
@@ -61,32 +57,25 @@ export default function Dashboard({ user, onEnterRoom }) {
     loadRooms();
   }
 
-async function joinRoom() {
-  // check limit on frontend first
-  if (rooms.length >= 3) {
-    return alert('You can only be in up to 3 rooms.');
+  async function joinRoom() {
+    if (rooms.length >= 3) return alert('You can only be in up to 3 rooms.');
+
+    const { data: room, error } = await supabase
+      .from('ROOMS').select('*')
+      .eq('room_id', joinRoomId).eq('password', joinPassword).single();
+
+    if (error || !room) return alert('Invalid room or password');
+
+    const { error: membershipError } = await supabase
+      .from('MEMBERSHIP')
+      .insert({ user_id: user.id, room_id: room.room_id });
+
+    if (membershipError) return alert(membershipError.message);
+
+    setJoinRoomId('');
+    setJoinPassword('');
+    loadRooms();
   }
-
-  const { data: room, error } = await supabase
-    .from('ROOMS')
-    .select('*')
-    .eq('room_id', joinRoomId)
-    .eq('password', joinPassword)
-    .single();
-
-  if (error || !room) return alert('Invalid room or password');
-
-  const { error: membershipError } = await supabase
-    .from('MEMBERSHIP')
-    .insert({ user_id: user.id, room_id: room.room_id });
-
-  // database trigger will catch if room is full
-  if (membershipError) return alert(membershipError.message);
-
-  setJoinRoomId('');
-  setJoinPassword('');
-  loadRooms();
-}
 
   const inputStyle = {
     background: 'rgba(255,255,255,0.05)',
@@ -127,12 +116,12 @@ async function joinRoom() {
 
         {/* Hero text */}
         <div className="fade-up" style={{ marginBottom: 48 }}>
-        <h1 style={{ fontSize: 42, fontWeight: 800, margin: 0, letterSpacing: '-1px', color: '#f0f4ff' }}>
-        Your Rooms
-        </h1>
-        <p style={{ color: '#64748b', marginTop: 8, fontSize: 16 }}>
-        {rooms.length}/3 rooms · Manage your shared spaces.
-        </p>
+          <h1 style={{ fontSize: 42, fontWeight: 800, margin: 0, letterSpacing: '-1px', color: '#f0f4ff' }}>
+            Your Rooms
+          </h1>
+          <p style={{ color: '#64748b', marginTop: 8, fontSize: 16 }}>
+            {rooms.length}/3 rooms · Manage your shared spaces.
+          </p>
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 380px', gap: 32, alignItems: 'start' }}>
@@ -176,11 +165,9 @@ async function joinRoom() {
                       {r.name ?? 'Unnamed Room'}
                     </p>
                     <p style={{ fontSize: 11, color: '#475569', margin: '4px 0 16px', fontFamily: 'monospace' }}>
-                      {r.room_id.slice(0, 8)}...
+                      ID: {r.room_id.slice(0, 8)}...
                     </p>
-                    <span style={{
-                      fontSize: 13, color: '#10b981', fontWeight: 600,
-                    }}>
+                    <span style={{ fontSize: 13, color: '#10b981', fontWeight: 600 }}>
                       Enter →
                     </span>
                   </div>
@@ -210,24 +197,23 @@ async function joinRoom() {
                     onChange={e => setRoomPassword(e.target.value)}
                     onKeyDown={e => e.key === 'Enter' && createRoom()}
                   />
-                    <button
+                  <button
                     onClick={createRoom}
                     disabled={rooms.length >= 3}
                     style={{
-                        ...btnBase,
-                        padding: '11px 18px',
-                        background: rooms.length >= 3
-                        ? 'rgba(255,255,255,0.05)'
-                        : 'linear-gradient(135deg, #10b981, #059669)',
-                        color: rooms.length >= 3 ? '#475569' : 'white',
-                        whiteSpace: 'nowrap',
-                        boxShadow: rooms.length >= 3 ? 'none' : '0 4px 16px rgba(16,185,129,0.2)',
-                        cursor: rooms.length >= 3 ? 'not-allowed' : 'pointer',
+                      ...btnBase, padding: '11px 18px', whiteSpace: 'nowrap',
+                      background: rooms.length >= 3 ? 'rgba(255,255,255,0.05)' : 'linear-gradient(135deg, #10b981, #059669)',
+                      color: rooms.length >= 3 ? '#475569' : 'white',
+                      boxShadow: rooms.length >= 3 ? 'none' : '0 4px 16px rgba(16,185,129,0.2)',
+                      cursor: rooms.length >= 3 ? 'not-allowed' : 'pointer',
                     }}
-                    >
+                  >
                     {rooms.length >= 3 ? 'Limit reached' : 'Create'}
-                    </button>
+                  </button>
                 </div>
+                <p style={{ fontSize: 11, color: '#475569', marginTop: 8 }}>
+                  A fun name will be auto-generated 🎲
+                </p>
               </div>
 
               <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', marginBottom: 28 }} />
@@ -242,12 +228,20 @@ async function joinRoom() {
                   <input style={inputStyle} placeholder="Password" value={joinPassword} onChange={e => setJoinPassword(e.target.value)} onKeyDown={e => e.key === 'Enter' && joinRoom()} />
                   <button
                     onClick={joinRoom}
-                    style={{ ...btnBase, padding: '12px', background: 'rgba(255,255,255,0.06)', color: '#f0f4ff', border: '1px solid rgba(255,255,255,0.1)', marginTop: 4 }}
+                    disabled={rooms.length >= 3}
+                    style={{
+                      ...btnBase, padding: '12px', marginTop: 4,
+                      background: rooms.length >= 3 ? 'rgba(255,255,255,0.03)' : 'rgba(255,255,255,0.06)',
+                      color: rooms.length >= 3 ? '#475569' : '#f0f4ff',
+                      border: '1px solid rgba(255,255,255,0.1)',
+                      cursor: rooms.length >= 3 ? 'not-allowed' : 'pointer',
+                    }}
                   >
-                    Join Room
+                    {rooms.length >= 3 ? 'Limit reached' : 'Join Room'}
                   </button>
                 </div>
               </div>
+
             </div>
           </div>
 

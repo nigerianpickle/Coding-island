@@ -32,6 +32,9 @@ export default function Room({ roomId, user, onExit }) {
   const [taskInput, setTaskInput] = useState('');
   const [itemInput, setItemInput] = useState('');
   const [itemPrice, setItemPrice] = useState('');
+  const [roomName, setRoomName] = useState('');
+  const [editingName, setEditingName] = useState(false);
+  const [nameInput, setNameInput] = useState('');
 
   const fetchUserMap = useCallback(async (userIds) => {
     if (!userIds.length) return;
@@ -51,15 +54,9 @@ export default function Room({ roomId, user, onExit }) {
       .eq('room_id', roomId)
       .order('created_at', { ascending: true });
     if (error) return console.error(error);
-
-    // keep any temp tasks that haven't been replaced yet
-    setTasks(prev => {
-      const tempTasks = prev.filter(t => String(t.task_id).startsWith('temp-'));
-      return [...(data || []), ...tempTasks];
-    });
-
-  fetchUserMap([...new Set((data || []).map(t => t.user_id))]);
-}, [roomId, fetchUserMap]);
+    setTasks(data || []);
+    fetchUserMap([...new Set((data || []).map(t => t.user_id))]);
+  }, [roomId, fetchUserMap]);
 
   const loadShoppingItems = useCallback(async () => {
     const { data, error } = await supabase
@@ -69,19 +66,24 @@ export default function Room({ roomId, user, onExit }) {
       .order('is_purchased', { ascending: true })
       .order('created_at', { ascending: true });
     if (error) return console.error(error);
-
-    // keep any temp items that haven't been replaced yet
-    setItems(prev => {
-      const tempItems = prev.filter(i => String(i.item_id).startsWith('temp-'));
-      return [...tempItems, ...(data || [])];
-    });
-
+    setItems(data || []);
     fetchUserMap([...new Set((data || []).map(i => i.added_by))]);
   }, [roomId, fetchUserMap]);
+
+  const loadRoomName = useCallback(async () => {
+    const { data, error } = await supabase
+      .from('ROOMS')
+      .select('name')
+      .eq('room_id', roomId)
+      .single();
+    if (error) return;
+    setRoomName(data.name ?? 'Unnamed Room');
+  }, [roomId]);
 
   useEffect(() => {
     loadTasks();
     loadShoppingItems();
+    loadRoomName();
 
     const channel = supabase
       .channel(`room-${roomId}`)
@@ -96,27 +98,16 @@ export default function Room({ roomId, user, onExit }) {
       .subscribe();
 
     return () => supabase.removeChannel(channel);
-  }, [roomId, loadTasks, loadShoppingItems]);
+  }, [roomId, loadTasks, loadShoppingItems, loadRoomName]);
 
   async function addTask() {
     const description = taskInput.trim();
     if (!description) return;
     setTaskInput('');
-    const tempTask = {
-      task_id: 'temp-' + Date.now(),
-      description,
-      user_id: user.id,
-      room_id: roomId,
-      is_done: false,
-    };
-    setTasks(prev => [...prev, tempTask]);
     const { error } = await supabase
       .from('TASKS')
       .insert({ room_id: roomId, user_id: user.id, description });
-    if (error) {
-      alert(error.message);
-      setTasks(prev => prev.filter(t => t.task_id !== tempTask.task_id));
-    }
+    if (error) alert(error.message);
   }
 
   async function deleteTask(taskId) {
@@ -130,22 +121,16 @@ export default function Room({ roomId, user, onExit }) {
     const price = parseFloat(itemPrice) || 0;
     setItemInput('');
     setItemPrice('');
-
     const { error } = await supabase
       .from('SHOPPING_ITEMS')
       .insert({ room_id: roomId, added_by: user.id, item, item_price: price });
-
     if (error) return alert(error.message);
-
-    await loadShoppingItems(); // force reload
+    await loadShoppingItems();
   }
 
   async function toggleItem(itemId, currentValue) {
-    console.log('toggleItem called', itemId, currentValue);
-    if (String(itemId).startsWith('temp-')) {
-      console.log('blocked — temp item');
-      return;
-    }
+    if (String(itemId).startsWith('temp-')) return;
+
     setItems(prev => {
       const updated = prev.map(i =>
         i.item_id === itemId ? { ...i, is_purchased: !currentValue } : i
@@ -173,6 +158,18 @@ export default function Room({ roomId, user, onExit }) {
         ];
       });
     }
+  }
+
+  async function saveRoomName() {
+    const newName = nameInput.trim();
+    if (!newName) return;
+    const { error } = await supabase
+      .from('ROOMS')
+      .update({ name: newName })
+      .eq('room_id', roomId);
+    if (error) return alert('Failed to rename room: ' + error.message);
+    setRoomName(newName);
+    setEditingName(false);
   }
 
   const inputStyle = {
@@ -210,10 +207,61 @@ export default function Room({ roomId, user, onExit }) {
       </div>
 
       <div style={{ maxWidth: 1100, margin: '0 auto', padding: '48px 40px' }}>
+
+        {/* Room title + rename */}
         <div className="fade-up" style={{ marginBottom: 40 }}>
-          <h1 style={{ fontSize: 36, fontWeight: 800, margin: 0, letterSpacing: '-0.5px', color: '#f0f4ff' }}>
-            Your Room
-          </h1>
+          {editingName ? (
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <input
+                value={nameInput}
+                onChange={e => setNameInput(e.target.value)}
+                onKeyDown={e => {
+                  if (e.key === 'Enter') saveRoomName();
+                  if (e.key === 'Escape') setEditingName(false);
+                }}
+                autoFocus
+                style={{
+                  background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(16,185,129,0.5)',
+                  borderRadius: 10, padding: '8px 14px', color: '#f0f4ff',
+                  fontSize: 28, fontFamily: 'Syne, sans-serif', fontWeight: 800,
+                  outline: 'none', letterSpacing: '-0.5px',
+                }}
+              />
+              <button
+                onClick={saveRoomName}
+                style={{
+                  background: 'linear-gradient(135deg, #10b981, #059669)',
+                  border: 'none', borderRadius: 8, padding: '8px 16px',
+                  color: 'white', fontSize: 13, fontWeight: 600,
+                  cursor: 'pointer', fontFamily: 'DM Sans, sans-serif',
+                }}
+              >
+                Save
+              </button>
+              <button
+                onClick={() => setEditingName(false)}
+                style={{ background: 'none', border: 'none', color: '#475569', cursor: 'pointer', fontSize: 13 }}
+              >
+                Cancel
+              </button>
+            </div>
+          ) : (
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+              <h1 style={{ fontSize: 36, fontWeight: 800, margin: 0, letterSpacing: '-0.5px', color: '#f0f4ff' }}>
+                {roomName || 'Loading...'}
+              </h1>
+              <button
+                onClick={() => { setNameInput(roomName); setEditingName(true); }}
+                style={{
+                  background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)',
+                  borderRadius: 8, padding: '4px 10px', color: '#475569', fontSize: 12,
+                  cursor: 'pointer', fontFamily: 'DM Sans, sans-serif',
+                }}
+              >
+                rename
+              </button>
+            </div>
+          )}
           <p style={{ color: '#475569', fontSize: 13, marginTop: 6, fontFamily: 'monospace' }}>
             {roomId}
           </p>
@@ -253,7 +301,6 @@ export default function Room({ roomId, user, onExit }) {
                       display: 'flex', alignItems: 'center', gap: 12,
                       padding: '10px 12px', borderRadius: 10,
                       background: 'rgba(255,255,255,0.02)',
-                      opacity: String(t.task_id).startsWith('temp-') ? 0.5 : 1,
                       transition: 'background 0.15s',
                     }}
                     onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.05)'}
@@ -261,7 +308,7 @@ export default function Room({ roomId, user, onExit }) {
                   >
                     <input
                       type="checkbox"
-                      onChange={() => !String(t.task_id).startsWith('temp-') && deleteTask(t.task_id)}
+                      onChange={() => deleteTask(t.task_id)}
                       style={{ accentColor: '#10b981', width: 16, height: 16, cursor: 'pointer' }}
                     />
                     <div style={{ flex: 1 }}>
@@ -318,7 +365,6 @@ export default function Room({ roomId, user, onExit }) {
                       display: 'flex', alignItems: 'center', gap: 12,
                       padding: '10px 12px', borderRadius: 10,
                       background: 'rgba(255,255,255,0.02)',
-                      opacity: String(i.item_id).startsWith('temp-') ? 0.5 : 1,
                       transition: 'background 0.15s',
                     }}
                     onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.05)'}
