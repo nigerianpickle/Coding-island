@@ -130,26 +130,22 @@ export default function Room({ roomId, user, onExit }) {
     const price = parseFloat(itemPrice) || 0;
     setItemInput('');
     setItemPrice('');
-    const tempItem = {
-      item_id: 'temp-' + Date.now(),
-      item,
-      added_by: user.id,
-      is_purchased: false,
-      item_price: price,
-    };
-    setItems(prev => [tempItem, ...prev]);
+
     const { error } = await supabase
       .from('SHOPPING_ITEMS')
       .insert({ room_id: roomId, added_by: user.id, item, item_price: price });
-    if (error) {
-      alert(error.message);
-      setItems(prev => prev.filter(i => i.item_id !== tempItem.item_id));
-    }
+
+    if (error) return alert(error.message);
+
+    await loadShoppingItems(); // force reload
   }
 
   async function toggleItem(itemId, currentValue) {
-    if (String(itemId).startsWith('temp-')) return;
-
+    console.log('toggleItem called', itemId, currentValue);
+    if (String(itemId).startsWith('temp-')) {
+      console.log('blocked — temp item');
+      return;
+    }
     setItems(prev => {
       const updated = prev.map(i =>
         i.item_id === itemId ? { ...i, is_purchased: !currentValue } : i
