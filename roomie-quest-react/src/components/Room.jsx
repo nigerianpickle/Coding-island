@@ -93,17 +93,45 @@ export default function Room({ roomId, user, onExit }) {
     const price = parseFloat(itemPrice) || 0;
     setItemInput(''); setItemPrice('');
     const tempItem = { item_id: 'temp-' + Date.now(), item, added_by: user.id, is_purchased: false, item_price: price };
-    setItems(prev => [...prev, tempItem]);
+    setItems(prev => [tempItem, ...prev]);
     const { error } = await supabase.from('SHOPPING_ITEMS').insert({ room_id: roomId, added_by: user.id, item, item_price: price });
     if (error) { alert(error.message); setItems(prev => prev.filter(i => i.item_id !== tempItem.item_id)); }
   }
 
   async function toggleItem(itemId, currentValue) {
+    // don't act on temp items
+    if (String(itemId).startsWith('temp-')) return;
+
+    // update UI instantly
     setItems(prev => {
-      const updated = prev.map(i => i.item_id === itemId ? { ...i, is_purchased: !currentValue } : i);
-      return [...updated.filter(i => !i.is_purchased), ...updated.filter(i => i.is_purchased)];
+      const updated = prev.map(i =>
+        i.item_id === itemId ? { ...i, is_purchased: !currentValue } : i
+      );
+      return [
+        ...updated.filter(i => !i.is_purchased),
+        ...updated.filter(i => i.is_purchased),
+      ];
     });
-    await supabase.from('SHOPPING_ITEMS').update({ is_purchased: !currentValue }).eq('item_id', itemId);
+
+    // sync to Supabase
+    const { error } = await supabase
+      .from('SHOPPING_ITEMS')
+      .update({ is_purchased: !currentValue })
+      .eq('item_id', itemId);
+
+    if (error) {
+      console.error('Failed to update item:', error);
+      // revert on failure
+      setItems(prev => {
+        const reverted = prev.map(i =>
+          i.item_id === itemId ? { ...i, is_purchased: currentValue } : i
+        );
+        return [
+          ...reverted.filter(i => !i.is_purchased),
+          ...reverted.filter(i => i.is_purchased),
+        ];
+      });
+    }
   }
 
   const inputStyle = {
@@ -239,7 +267,7 @@ export default function Room({ roomId, user, onExit }) {
                     <input
                       type="checkbox"
                       checked={i.is_purchased}
-                      onChange={() => !i.item_id.startsWith('temp-') && toggleItem(i.item_id, i.is_purchased)}
+                      onChange={() => toggleItem(i.item_id, i.is_purchased)}
                       style={{ accentColor: '#10b981', width: 16, height: 16, cursor: 'pointer' }}
                     />
                     <div style={{ flex: 1 }}>

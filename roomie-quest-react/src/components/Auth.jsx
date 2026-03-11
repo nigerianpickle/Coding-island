@@ -8,8 +8,24 @@ export default function Auth() {
 
   async function handleLogin() {
     setLoading(true);
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) alert(error.message);
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) { alert(error.message); setLoading(false); return; }
+
+    // sync to USERS table on every login
+    const user = data.user;
+    const { data: existing } = await supabase
+      .from('USERS')
+      .select('user_id')
+      .eq('user_id', user.id)
+      .maybeSingle();
+
+    if (!existing) {
+      await supabase.from('USERS').insert({
+        user_id: user.id,
+        user_name: email.split('@')[0]
+      });
+    }
+
     setLoading(false);
   }
 
