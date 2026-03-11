@@ -7,6 +7,10 @@ const btnBase = {
   transition: 'transform 0.15s, opacity 0.15s',
 };
 
+
+const ADJECTIVES = ['Purple', 'Golden', 'Silent', 'Cosmic', 'Lazy', 'Brave', 'Fuzzy', 'Mighty', 'Swift', 'Chill'];
+const NOUNS = ['Penguin', 'Cactus', 'Noodle', 'Rocket', 'Panda', 'Waffle', 'Comet', 'Pickle', 'Sloth', 'Mango'];
+
 export default function Dashboard({ user, onEnterRoom }) {
   const [rooms, setRooms] = useState([]);
   const [roomPassword, setRoomPassword] = useState('');
@@ -15,6 +19,15 @@ export default function Dashboard({ user, onEnterRoom }) {
 
   useEffect(() => { loadRooms(); }, []);
 
+
+
+  function generateRoomName() {
+  const adj = ADJECTIVES[Math.floor(Math.random() * ADJECTIVES.length)];
+  const noun = NOUNS[Math.floor(Math.random() * NOUNS.length)];
+  return `${adj} ${noun}`;
+  }
+
+  
   async function loadRooms() {
     const { data: memberships, error } = await supabase
       .from('MEMBERSHIP').select('room_id').eq('user_id', user.id);
@@ -25,29 +38,28 @@ export default function Dashboard({ user, onEnterRoom }) {
     setRooms(rooms || []);
   }
 
-async function createRoom() {
-  // check limit on frontend first for instant feedback
-  if (rooms.length >= 3) {
-    return alert('You can only be in up to 3 rooms.');
+  async function createRoom() {
+    if (rooms.length >= 3) return alert('You can only be in up to 3 rooms.');
+
+    const name = generateRoomName();
+
+    const { data: room, error } = await supabase
+      .from('ROOMS')
+      .insert({ password: roomPassword, name })
+      .select()
+      .single();
+
+    if (error) return alert(error.message);
+
+    const { error: membershipError } = await supabase
+      .from('MEMBERSHIP')
+      .insert({ user_id: user.id, room_id: room.room_id });
+
+    if (membershipError) return alert(membershipError.message);
+
+    setRoomPassword('');
+    loadRooms();
   }
-
-  const { data: room, error } = await supabase
-    .from('ROOMS')
-    .insert({ password: roomPassword })
-    .select()
-    .single();
-
-  if (error) return alert(error.message);
-
-  const { error: membershipError } = await supabase
-    .from('MEMBERSHIP')
-    .insert({ user_id: user.id, room_id: room.room_id });
-
-  if (membershipError) return alert(membershipError.message);
-
-  setRoomPassword('');
-  loadRooms();
-}
 
 async function joinRoom() {
   // check limit on frontend first
@@ -161,7 +173,7 @@ async function joinRoom() {
                       fontSize: 18,
                     }}>🏠</div>
                     <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: 15, margin: 0, color: '#f0f4ff' }}>
-                      Room
+                      {r.name ?? 'Unnamed Room'}
                     </p>
                     <p style={{ fontSize: 11, color: '#475569', margin: '4px 0 16px', fontFamily: 'monospace' }}>
                       {r.room_id.slice(0, 8)}...
