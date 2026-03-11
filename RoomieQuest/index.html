@@ -95,24 +95,40 @@
   <!-- Content -->
   <div class="grid md:grid-cols-2 gap-8">
     
-    <!-- Tasks -->
-    <div class="bg-white rounded-xl p-6 shadow-sm border">
-      <h2 class="text-lg font-semibold mb-4">Tasks</h2>
-      <ul id="task-list" class="space-y-2 text-sm text-gray-700">
-        <li class="text-gray-400">No tasks yet</li>
-      </ul>
+  <!-- Tasks -->
+  <div class="bg-white rounded-xl p-6 shadow-sm border">
+    <h2 class="text-lg font-semibold mb-4">Tasks</h2>
+
+    <!-- Add task form -->
+    <div class="flex gap-2 mb-4">
+      <input id="task-input" type="text" placeholder="New task..."
+        class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition text-sm" />
+      <button id="add-task"
+        class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition text-sm">Add</button>
     </div>
 
-    <!-- Shopping List -->
-    <div class="bg-white rounded-xl p-6 shadow-sm border">
-      <h2 class="text-lg font-semibold mb-4">Shopping List</h2>
-      <ul id="shopping-list" class="space-y-2 text-sm text-gray-700">
-        <li class="text-gray-400">No items yet</li>
-      </ul>
-    </div>
-
+    <ul id="task-list" class="space-y-2 text-sm text-gray-700">
+      <li class="text-gray-400">No tasks yet</li>
+    </ul>
   </div>
-</div>
+
+  <!-- Shopping List -->
+  <div class="bg-white rounded-xl p-6 shadow-sm border">
+    <h2 class="text-lg font-semibold mb-4">Shopping List</h2>
+
+    <div class="flex gap-2 mb-2">
+      <input id="item-input" type="text" placeholder="Item name..."
+        class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition text-sm" />
+      <input id="item-price" type="number" placeholder="$0.00" min="0" step="0.01"
+        class="w-24 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition text-sm" />
+    </div>
+    <button id="add-item"
+      class="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition text-sm mb-4">Add Item</button>
+
+    <ul id="shopping-list" class="space-y-2 text-sm text-gray-700">
+      <li class="text-gray-400">No items yet</li>
+    </ul>
+  </div>
 
 
   <!-- Supabase CDN -->

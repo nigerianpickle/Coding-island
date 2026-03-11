@@ -34,6 +34,8 @@ classes = {
     "Class_B": ["Student_4"]
 }
 
+#Not unique history of which instructors each student had before
+#Students may have multiple instructors in their history
 student_history = {
     "Student_1": ["Alice"],
     "Student_2": ["Alice", "Ben"],

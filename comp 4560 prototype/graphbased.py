@@ -85,8 +85,8 @@ for class_id, students in classes.items():
         if score > 0:
             G.add_edge(class_id, name, weight=score)
 
-# RUN MATCHING
 
+# RUN MATCHING
 matching = nx.algorithms.matching.max_weight_matching(G)
 
 # OUTPUT
