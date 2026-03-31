@@ -1,6 +1,23 @@
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '../supabaseClient';
 
+const MEMBER_COLORS = [
+  '#10b981', '#6366f1', '#f59e0b', '#ef4444', '#8b5cf6',
+];
+
+function getInitials(name) {
+  if (!name) return '?';
+  return name.slice(0, 2).toUpperCase();
+}
+
+function getMemberColor(userId) {
+  let hash = 0;
+  for (let i = 0; i < userId.length; i++) {
+    hash = userId.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  return MEMBER_COLORS[Math.abs(hash) % MEMBER_COLORS.length];
+}
+
 const Card = ({ icon, title, count, children }) => (
   <div style={{
     background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)',
@@ -28,6 +45,7 @@ const Card = ({ icon, title, count, children }) => (
 export default function Room({ roomId, user, onExit }) {
   const [tasks, setTasks] = useState([]);
   const [items, setItems] = useState([]);
+  const [members, setMembers] = useState([]);
   const [userMap, setUserMap] = useState({});
   const [taskInput, setTaskInput] = useState('');
   const [itemInput, setItemInput] = useState('');
@@ -35,6 +53,7 @@ export default function Room({ roomId, user, onExit }) {
   const [roomName, setRoomName] = useState('');
   const [editingName, setEditingName] = useState(false);
   const [nameInput, setNameInput] = useState('');
+  const [copied, setCopied] = useState(false);
 
   const fetchUserMap = useCallback(async (userIds) => {
     if (!userIds.length) return;
@@ -49,8 +68,7 @@ export default function Room({ roomId, user, onExit }) {
 
   const loadTasks = useCallback(async () => {
     const { data, error } = await supabase
-      .from('TASKS')
-      .select('*')
+      .from('TASKS').select('*')
       .eq('room_id', roomId)
       .order('created_at', { ascending: true });
     if (error) return console.error(error);
@@ -60,8 +78,7 @@ export default function Room({ roomId, user, onExit }) {
 
   const loadShoppingItems = useCallback(async () => {
     const { data, error } = await supabase
-      .from('SHOPPING_ITEMS')
-      .select('*')
+      .from('SHOPPING_ITEMS').select('*')
       .eq('room_id', roomId)
       .order('is_purchased', { ascending: true })
       .order('created_at', { ascending: true });
@@ -72,18 +89,33 @@ export default function Room({ roomId, user, onExit }) {
 
   const loadRoomName = useCallback(async () => {
     const { data, error } = await supabase
-      .from('ROOMS')
-      .select('name')
-      .eq('room_id', roomId)
-      .single();
+      .from('ROOMS').select('name')
+      .eq('room_id', roomId).single();
     if (error) return;
     setRoomName(data.name ?? 'Unnamed Room');
+  }, [roomId]);
+
+  const loadMembers = useCallback(async () => {
+    const { data: memberships, error } = await supabase
+      .from('MEMBERSHIP').select('user_id')
+      .eq('room_id', roomId);
+    if (error) return console.error(error);
+
+    const userIds = (memberships || []).map(m => m.user_id);
+    if (!userIds.length) return;
+
+    const { data: users } = await supabase
+      .from('USERS').select('user_id, user_name')
+      .in('user_id', userIds);
+
+    setMembers(users || []);
   }, [roomId]);
 
   useEffect(() => {
     loadTasks();
     loadShoppingItems();
     loadRoomName();
+    loadMembers();
 
     const channel = supabase
       .channel(`room-${roomId}`)
@@ -95,10 +127,14 @@ export default function Room({ roomId, user, onExit }) {
         { event: '*', schema: 'public', table: 'SHOPPING_ITEMS', filter: `room_id=eq.${roomId}` },
         () => loadShoppingItems()
       )
+      .on('postgres_changes',
+        { event: '*', schema: 'public', table: 'MEMBERSHIP', filter: `room_id=eq.${roomId}` },
+        () => loadMembers()
+      )
       .subscribe();
 
     return () => supabase.removeChannel(channel);
-  }, [roomId, loadTasks, loadShoppingItems, loadRoomName]);
+  }, [roomId, loadTasks, loadShoppingItems, loadRoomName, loadMembers]);
 
   async function addTask() {
     const description = taskInput.trim();
@@ -164,12 +200,16 @@ export default function Room({ roomId, user, onExit }) {
     const newName = nameInput.trim();
     if (!newName) return;
     const { error } = await supabase
-      .from('ROOMS')
-      .update({ name: newName })
-      .eq('room_id', roomId);
-    if (error) return alert('Failed to rename room: ' + error.message);
+      .from('ROOMS').update({ name: newName }).eq('room_id', roomId);
+    if (error) return alert('Failed to rename: ' + error.message);
     setRoomName(newName);
     setEditingName(false);
+  }
+
+  function copyRoomId() {
+    navigator.clipboard.writeText(roomId);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   }
 
   const inputStyle = {
@@ -209,7 +249,7 @@ export default function Room({ roomId, user, onExit }) {
       <div style={{ maxWidth: 1100, margin: '0 auto', padding: '48px 40px' }}>
 
         {/* Room title + rename */}
-        <div className="fade-up" style={{ marginBottom: 40 }}>
+        <div className="fade-up" style={{ marginBottom: 32 }}>
           {editingName ? (
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
               <input
@@ -227,26 +267,17 @@ export default function Room({ roomId, user, onExit }) {
                   outline: 'none', letterSpacing: '-0.5px',
                 }}
               />
-              <button
-                onClick={saveRoomName}
-                style={{
-                  background: 'linear-gradient(135deg, #10b981, #059669)',
-                  border: 'none', borderRadius: 8, padding: '8px 16px',
-                  color: 'white', fontSize: 13, fontWeight: 600,
-                  cursor: 'pointer', fontFamily: 'DM Sans, sans-serif',
-                }}
-              >
-                Save
-              </button>
-              <button
-                onClick={() => setEditingName(false)}
-                style={{ background: 'none', border: 'none', color: '#475569', cursor: 'pointer', fontSize: 13 }}
-              >
-                Cancel
-              </button>
+              <button onClick={saveRoomName} style={{
+                background: 'linear-gradient(135deg, #10b981, #059669)',
+                border: 'none', borderRadius: 8, padding: '8px 16px',
+                color: 'white', fontSize: 13, fontWeight: 600, cursor: 'pointer',
+              }}>Save</button>
+              <button onClick={() => setEditingName(false)} style={{
+                background: 'none', border: 'none', color: '#475569', cursor: 'pointer', fontSize: 13,
+              }}>Cancel</button>
             </div>
           ) : (
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
               <h1 style={{ fontSize: 36, fontWeight: 800, margin: 0, letterSpacing: '-0.5px', color: '#f0f4ff' }}>
                 {roomName || 'Loading...'}
               </h1>
@@ -257,14 +288,71 @@ export default function Room({ roomId, user, onExit }) {
                   borderRadius: 8, padding: '4px 10px', color: '#475569', fontSize: 12,
                   cursor: 'pointer', fontFamily: 'DM Sans, sans-serif',
                 }}
-              >
-                rename
-              </button>
+              >rename</button>
             </div>
           )}
-          <p style={{ color: '#475569', fontSize: 13, marginTop: 6, fontFamily: 'monospace' }}>
-            {roomId}
-          </p>
+
+          {/* Room ID + share */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 8 }}>
+            <p style={{ color: '#475569', fontSize: 13, fontFamily: 'monospace', margin: 0 }}>
+              {roomId}
+            </p>
+            <button
+              onClick={copyRoomId}
+              style={{
+                background: copied ? 'rgba(16,185,129,0.15)' : 'rgba(255,255,255,0.05)',
+                border: `1px solid ${copied ? 'rgba(16,185,129,0.4)' : 'rgba(255,255,255,0.1)'}`,
+                borderRadius: 8, padding: '3px 10px',
+                color: copied ? '#10b981' : '#475569', fontSize: 12,
+                cursor: 'pointer', fontFamily: 'DM Sans, sans-serif',
+                transition: 'all 0.2s',
+              }}
+            >
+              {copied ? '✓ Copied!' : 'Copy ID'}
+            </button>
+          </div>
+        </div>
+
+        {/* Members bar */}
+        <div style={{
+          display: 'flex', alignItems: 'center', gap: 12,
+          marginBottom: 32, padding: '14px 20px',
+          background: 'rgba(255,255,255,0.02)',
+          border: '1px solid rgba(255,255,255,0.06)',
+          borderRadius: 14,
+        }}>
+          <span style={{ fontSize: 13, color: '#475569', fontWeight: 500 }}>Members</span>
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            {members.map(m => (
+              <div
+                key={m.user_id}
+                title={m.user_name}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: 7,
+                  background: 'rgba(255,255,255,0.04)',
+                  border: '1px solid rgba(255,255,255,0.08)',
+                  borderRadius: 99, padding: '4px 12px 4px 6px',
+                }}
+              >
+                <div style={{
+                  width: 26, height: 26, borderRadius: '50%',
+                  background: getMemberColor(m.user_id),
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: 11, fontWeight: 700, color: 'white',
+                  flexShrink: 0,
+                }}>
+                  {getInitials(m.user_name)}
+                </div>
+                <span style={{ fontSize: 13, color: '#e2e8f0' }}>{m.user_name}</span>
+                {m.user_id === user.id && (
+                  <span style={{ fontSize: 11, color: '#475569' }}>(you)</span>
+                )}
+              </div>
+            ))}
+          </div>
+          <span style={{ marginLeft: 'auto', fontSize: 12, color: '#475569' }}>
+            {members.length}/5 members
+          </span>
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
@@ -311,11 +399,17 @@ export default function Room({ roomId, user, onExit }) {
                       onChange={() => deleteTask(t.task_id)}
                       style={{ accentColor: '#10b981', width: 16, height: 16, cursor: 'pointer' }}
                     />
-                    <div style={{ flex: 1 }}>
+                    <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 8 }}>
                       <span style={{ fontSize: 14, color: '#e2e8f0' }}>{t.description}</span>
-                      <span style={{ fontSize: 11, color: '#475569', marginLeft: 8 }}>
-                        by {userMap[t.user_id] ?? 'you'}
-                      </span>
+                      <div style={{
+                        width: 20, height: 20, borderRadius: '50%',
+                        background: getMemberColor(t.user_id),
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        fontSize: 9, fontWeight: 700, color: 'white', flexShrink: 0,
+                        title: userMap[t.user_id] ?? 'unknown',
+                      }}>
+                        {getInitials(userMap[t.user_id] ?? '?')}
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -376,7 +470,7 @@ export default function Room({ roomId, user, onExit }) {
                       onChange={() => toggleItem(i.item_id, i.is_purchased)}
                       style={{ accentColor: '#10b981', width: 16, height: 16, cursor: 'pointer' }}
                     />
-                    <div style={{ flex: 1 }}>
+                    <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 8 }}>
                       <span style={{
                         fontSize: 14,
                         color: i.is_purchased ? '#475569' : '#e2e8f0',
@@ -384,9 +478,14 @@ export default function Room({ roomId, user, onExit }) {
                       }}>
                         {i.item}
                       </span>
-                      <span style={{ fontSize: 11, color: '#475569', marginLeft: 8 }}>
-                        by {userMap[i.added_by] ?? 'you'}
-                      </span>
+                      <div style={{
+                        width: 20, height: 20, borderRadius: '50%',
+                        background: getMemberColor(i.added_by),
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        fontSize: 9, fontWeight: 700, color: 'white', flexShrink: 0,
+                      }}>
+                        {getInitials(userMap[i.added_by] ?? '?')}
+                      </div>
                     </div>
                     {i.item_price > 0 && (
                       <span style={{
