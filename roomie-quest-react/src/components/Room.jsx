@@ -144,6 +144,7 @@ export default function Room({ roomId, user, onExit }) {
       .from('TASKS')
       .insert({ room_id: roomId, user_id: user.id, description });
     if (error) alert(error.message);
+    await loadTasks(); 
   }
 
   async function deleteTask(taskId) {
